@@ -1,4 +1,4 @@
-import { useState, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { useStore, BaseItem, EntityType, CANON_STATUSES, CanonStatus, statusColor } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -366,7 +366,6 @@ function ItemDialog({
   );
 }
 
-import { useEffect } from "react";
 function useStateInit(
   open: boolean, item: BaseItem | null,
   setName: (v: string) => void, setDescription: (v: string) => void,
