@@ -17,6 +17,7 @@ export async function parseFile(file: File): Promise<string> {
     return out.trim();
   }
   if (name.endsWith(".docx")) {
+    // @ts-ignore - no types for browser entry
     const mammoth: any = await import("mammoth/mammoth.browser");
     const buf = await file.arrayBuffer();
     const r = await mammoth.extractRawText({ arrayBuffer: buf });
