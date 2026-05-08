@@ -37,7 +37,7 @@ function Page() {
         <p className="text-sm text-muted-foreground">Review extracted suggestions before they become canon.</p>
       </div>
 
-      <div className="flex items-center gap-2 panel p-3">
+      <div className="flex items-center gap-2 panel p-3 flex-wrap">
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-[200px] bg-background"><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -48,6 +48,13 @@ function Page() {
           </SelectContent>
         </Select>
         <Button size="sm" variant="outline" onClick={() => setSelected(new Set(list.map((s) => s.id)))}>Select all</Button>
+        <Button size="sm" variant="destructive" onClick={() => {
+          const pending = list.filter((s) => s.status === "pending");
+          if (pending.length === 0) { toast.message("Nothing to reject"); return; }
+          if (!confirm(`Are you sure you want to reject all ${pending.length} pending suggestion(s)?`)) return;
+          pending.forEach((s) => rejectSuggestion(s.id));
+          toast.success(`Rejected ${pending.length}`);
+        }}><X className="w-3 h-3 mr-1" />Reject All</Button>
         {selected.size > 0 && (
           <>
             <span className="text-sm">{selected.size} selected</span>

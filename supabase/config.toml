@@ -1,0 +1,4 @@
+project_id = "oiyxntgyawrshkoofndp"
+
+[functions.writing-advice]
+verify_jwt = false

@@ -63,8 +63,15 @@ function InboxPage() {
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; if (!file) return;
-    const text = await file.text();
-    setDraft({ ...draft, rawText: text, title: draft.title || file.name });
+    try {
+      const { parseFile } = await import("@/lib/parseFile");
+      toast.message(`Parsing ${file.name}…`);
+      const text = await parseFile(file);
+      setDraft({ ...draft, rawText: text, title: draft.title || file.name });
+      toast.success(`Parsed ${file.name} (${text.length} chars)`);
+    } catch (err: any) {
+      toast.error(`Could not parse: ${err.message || err}`);
+    }
   };
 
   return (
@@ -87,7 +94,7 @@ function InboxPage() {
           <Textarea placeholder="Paste chapter, scene, notes, or lore..." rows={8} value={draft.rawText} onChange={(e) => setDraft({ ...draft, rawText: e.target.value })} className="bg-background font-mono text-sm" />
           <div>
             <label className="text-xs text-muted-foreground">Or upload a .txt / .md file</label>
-            <Input type="file" accept=".txt,.md,.json,.csv" onChange={onFile} className="bg-background" />
+            <Input type="file" accept=".txt,.md,.json,.csv,.pdf,.docx,.doc,.rtf" onChange={onFile} className="bg-background" />
           </div>
           <div className="grid md:grid-cols-3 gap-3">
             <Input placeholder="Chapter #" value={draft.chapter} onChange={(e) => setDraft({ ...draft, chapter: e.target.value })} className="bg-background" />
