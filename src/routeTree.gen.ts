@@ -9,10 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UploadsRouteImport } from './routes/uploads'
+import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as ImportReviewRouteImport } from './routes/import-review'
 import { Route as IndexRouteImport } from './routes/index'
 
+const UploadsRoute = UploadsRouteImport.update({
+  id: '/uploads',
+  path: '/uploads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
@@ -23,6 +36,11 @@ const InboxRoute = InboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImportReviewRoute = ImportReviewRouteImport.update({
+  id: '/import-review',
+  path: '/import-review',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +49,75 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
   '/projects': typeof ProjectsRoute
+  '/timeline': typeof TimelineRoute
+  '/uploads': typeof UploadsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
   '/projects': typeof ProjectsRoute
+  '/timeline': typeof TimelineRoute
+  '/uploads': typeof UploadsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
   '/projects': typeof ProjectsRoute
+  '/timeline': typeof TimelineRoute
+  '/uploads': typeof UploadsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/inbox' | '/projects'
+  fullPaths:
+    | '/'
+    | '/import-review'
+    | '/inbox'
+    | '/projects'
+    | '/timeline'
+    | '/uploads'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inbox' | '/projects'
-  id: '__root__' | '/' | '/inbox' | '/projects'
+  to: '/' | '/import-review' | '/inbox' | '/projects' | '/timeline' | '/uploads'
+  id:
+    | '__root__'
+    | '/'
+    | '/import-review'
+    | '/inbox'
+    | '/projects'
+    | '/timeline'
+    | '/uploads'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ImportReviewRoute: typeof ImportReviewRoute
   InboxRoute: typeof InboxRoute
   ProjectsRoute: typeof ProjectsRoute
+  TimelineRoute: typeof TimelineRoute
+  UploadsRoute: typeof UploadsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/uploads': {
+      id: '/uploads'
+      path: '/uploads'
+      fullPath: '/uploads'
+      preLoaderRoute: typeof UploadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects': {
       id: '/projects'
       path: '/projects'
@@ -75,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InboxRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/import-review': {
+      id: '/import-review'
+      path: '/import-review'
+      fullPath: '/import-review'
+      preLoaderRoute: typeof ImportReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,9 +151,22 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ImportReviewRoute: ImportReviewRoute,
   InboxRoute: InboxRoute,
   ProjectsRoute: ProjectsRoute,
+  TimelineRoute: TimelineRoute,
+  UploadsRoute: UploadsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
