@@ -23,14 +23,19 @@ import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as ImportReviewRouteImport } from './routes/import-review'
 import { Route as HeritageRouteImport } from './routes/heritage'
+import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as FamiliesRouteImport } from './routes/families'
 import { Route as FaithRouteImport } from './routes/faith'
 import { Route as FactionsRouteImport } from './routes/factions'
 import { Route as ExportsRouteImport } from './routes/exports'
 import { Route as ContinuityRouteImport } from './routes/continuity'
+import { Route as CollaboratorsRouteImport } from './routes/collaborators'
 import { Route as CharactersRouteImport } from './routes/characters'
 import { Route as CanonRouteImport } from './routes/canon'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuditLogRouteImport } from './routes/audit-log'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 
 const WorldbuildingRoute = WorldbuildingRouteImport.update({
   id: '/worldbuilding',
@@ -102,6 +107,11 @@ const HeritageRoute = HeritageRouteImport.update({
   path: '/heritage',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FamiliesRoute = FamiliesRouteImport.update({
   id: '/families',
   path: '/families',
@@ -127,6 +137,11 @@ const ContinuityRoute = ContinuityRouteImport.update({
   path: '/continuity',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollaboratorsRoute = CollaboratorsRouteImport.update({
+  id: '/collaborators',
+  path: '/collaborators',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CharactersRoute = CharactersRouteImport.update({
   id: '/characters',
   path: '/characters',
@@ -137,21 +152,40 @@ const CanonRoute = CanonRouteImport.update({
   path: '/canon',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditLogRoute = AuditLogRouteImport.update({
+  id: '/audit-log',
+  path: '/audit-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audit-log': typeof AuditLogRoute
+  '/auth': typeof AuthRoute
   '/canon': typeof CanonRoute
   '/characters': typeof CharactersRoute
+  '/collaborators': typeof CollaboratorsRoute
   '/continuity': typeof ContinuityRoute
   '/exports': typeof ExportsRoute
   '/factions': typeof FactionsRoute
   '/faith': typeof FaithRoute
   '/families': typeof FamiliesRoute
+  '/glossary': typeof GlossaryRoute
   '/heritage': typeof HeritageRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
@@ -166,16 +200,21 @@ export interface FileRoutesByFullPath {
   '/trash': typeof TrashRoute
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
+  '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audit-log': typeof AuditLogRoute
+  '/auth': typeof AuthRoute
   '/canon': typeof CanonRoute
   '/characters': typeof CharactersRoute
+  '/collaborators': typeof CollaboratorsRoute
   '/continuity': typeof ContinuityRoute
   '/exports': typeof ExportsRoute
   '/factions': typeof FactionsRoute
   '/faith': typeof FaithRoute
   '/families': typeof FamiliesRoute
+  '/glossary': typeof GlossaryRoute
   '/heritage': typeof HeritageRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
@@ -190,17 +229,22 @@ export interface FileRoutesByTo {
   '/trash': typeof TrashRoute
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
+  '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/audit-log': typeof AuditLogRoute
+  '/auth': typeof AuthRoute
   '/canon': typeof CanonRoute
   '/characters': typeof CharactersRoute
+  '/collaborators': typeof CollaboratorsRoute
   '/continuity': typeof ContinuityRoute
   '/exports': typeof ExportsRoute
   '/factions': typeof FactionsRoute
   '/faith': typeof FaithRoute
   '/families': typeof FamiliesRoute
+  '/glossary': typeof GlossaryRoute
   '/heritage': typeof HeritageRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
@@ -215,18 +259,23 @@ export interface FileRoutesById {
   '/trash': typeof TrashRoute
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
+  '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/audit-log'
+    | '/auth'
     | '/canon'
     | '/characters'
+    | '/collaborators'
     | '/continuity'
     | '/exports'
     | '/factions'
     | '/faith'
     | '/families'
+    | '/glossary'
     | '/heritage'
     | '/import-review'
     | '/inbox'
@@ -241,16 +290,21 @@ export interface FileRouteTypes {
     | '/trash'
     | '/uploads'
     | '/worldbuilding'
+    | '/invite/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/audit-log'
+    | '/auth'
     | '/canon'
     | '/characters'
+    | '/collaborators'
     | '/continuity'
     | '/exports'
     | '/factions'
     | '/faith'
     | '/families'
+    | '/glossary'
     | '/heritage'
     | '/import-review'
     | '/inbox'
@@ -265,16 +319,21 @@ export interface FileRouteTypes {
     | '/trash'
     | '/uploads'
     | '/worldbuilding'
+    | '/invite/$token'
   id:
     | '__root__'
     | '/'
+    | '/audit-log'
+    | '/auth'
     | '/canon'
     | '/characters'
+    | '/collaborators'
     | '/continuity'
     | '/exports'
     | '/factions'
     | '/faith'
     | '/families'
+    | '/glossary'
     | '/heritage'
     | '/import-review'
     | '/inbox'
@@ -289,17 +348,22 @@ export interface FileRouteTypes {
     | '/trash'
     | '/uploads'
     | '/worldbuilding'
+    | '/invite/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuditLogRoute: typeof AuditLogRoute
+  AuthRoute: typeof AuthRoute
   CanonRoute: typeof CanonRoute
   CharactersRoute: typeof CharactersRoute
+  CollaboratorsRoute: typeof CollaboratorsRoute
   ContinuityRoute: typeof ContinuityRoute
   ExportsRoute: typeof ExportsRoute
   FactionsRoute: typeof FactionsRoute
   FaithRoute: typeof FaithRoute
   FamiliesRoute: typeof FamiliesRoute
+  GlossaryRoute: typeof GlossaryRoute
   HeritageRoute: typeof HeritageRoute
   ImportReviewRoute: typeof ImportReviewRoute
   InboxRoute: typeof InboxRoute
@@ -314,6 +378,7 @@ export interface RootRouteChildren {
   TrashRoute: typeof TrashRoute
   UploadsRoute: typeof UploadsRoute
   WorldbuildingRoute: typeof WorldbuildingRoute
+  InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -416,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HeritageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/families': {
       id: '/families'
       path: '/families'
@@ -451,6 +523,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContinuityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collaborators': {
+      id: '/collaborators'
+      path: '/collaborators'
+      fullPath: '/collaborators'
+      preLoaderRoute: typeof CollaboratorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/characters': {
       id: '/characters'
       path: '/characters'
@@ -465,6 +544,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CanonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit-log': {
+      id: '/audit-log'
+      path: '/audit-log'
+      fullPath: '/audit-log'
+      preLoaderRoute: typeof AuditLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -472,18 +565,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuditLogRoute: AuditLogRoute,
+  AuthRoute: AuthRoute,
   CanonRoute: CanonRoute,
   CharactersRoute: CharactersRoute,
+  CollaboratorsRoute: CollaboratorsRoute,
   ContinuityRoute: ContinuityRoute,
   ExportsRoute: ExportsRoute,
   FactionsRoute: FactionsRoute,
   FaithRoute: FaithRoute,
   FamiliesRoute: FamiliesRoute,
+  GlossaryRoute: GlossaryRoute,
   HeritageRoute: HeritageRoute,
   ImportReviewRoute: ImportReviewRoute,
   InboxRoute: InboxRoute,
@@ -498,7 +602,18 @@ const rootRouteChildren: RootRouteChildren = {
   TrashRoute: TrashRoute,
   UploadsRoute: UploadsRoute,
   WorldbuildingRoute: WorldbuildingRoute,
+  InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
