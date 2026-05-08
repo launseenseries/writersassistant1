@@ -2,11 +2,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { Sidebar } from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { useStore } from "@/lib/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AuthProvider } from "@/lib/auth";
+import { useTheme } from "@/lib/theme";
 
 function NotFoundComponent() {
   return (
@@ -75,21 +78,30 @@ function ProjectSwitcher() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { theme } = useTheme();
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("light", theme === "light");
+    document.body.classList.toggle("dark", theme === "dark");
+    document.body.classList.toggle("light", theme === "light");
+  }, [theme]);
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen w-full bg-background text-foreground">
-        <Sidebar />
-        <div className="flex-1 min-w-0 flex flex-col">
-          <header className="h-14 border-b border-border flex items-center justify-between px-6 sticky top-0 bg-background/80 backdrop-blur z-20">
-            <div className="text-sm text-muted-foreground">Active project</div>
-            <ProjectSwitcher />
-          </header>
-          <main className="flex-1 p-6 max-w-[1400px] w-full mx-auto">
-            <Outlet />
-          </main>
+      <AuthProvider>
+        <div className="flex min-h-screen w-full bg-background text-foreground">
+          <Sidebar />
+          <div className="flex-1 min-w-0 flex flex-col">
+            <header className="h-14 border-b border-border flex items-center justify-between px-6 sticky top-0 bg-background/80 backdrop-blur z-20">
+              <div className="text-sm text-muted-foreground">Active project</div>
+              <ProjectSwitcher />
+            </header>
+            <main className="flex-1 p-6 max-w-[1400px] w-full mx-auto">
+              <Outlet />
+            </main>
+          </div>
+          <Toaster richColors position="top-right" />
         </div>
-        <Toaster richColors position="top-right" />
-      </div>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
