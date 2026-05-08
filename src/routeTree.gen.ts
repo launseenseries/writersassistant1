@@ -9,13 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorldbuildingRouteImport } from './routes/worldbuilding'
 import { Route as UploadsRouteImport } from './routes/uploads'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as PathwaysRouteImport } from './routes/pathways'
+import { Route as MagicRouteImport } from './routes/magic'
+import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as ImportReviewRouteImport } from './routes/import-review'
+import { Route as HeritageRouteImport } from './routes/heritage'
+import { Route as FamiliesRouteImport } from './routes/families'
+import { Route as FaithRouteImport } from './routes/faith'
+import { Route as FactionsRouteImport } from './routes/factions'
+import { Route as CharactersRouteImport } from './routes/characters'
+import { Route as CanonRouteImport } from './routes/canon'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorldbuildingRoute = WorldbuildingRouteImport.update({
+  id: '/worldbuilding',
+  path: '/worldbuilding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UploadsRoute = UploadsRouteImport.update({
   id: '/uploads',
   path: '/uploads',
@@ -31,6 +46,21 @@ const ProjectsRoute = ProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PathwaysRoute = PathwaysRouteImport.update({
+  id: '/pathways',
+  path: '/pathways',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MagicRoute = MagicRouteImport.update({
+  id: '/magic',
+  path: '/magic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsRoute = LocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InboxRoute = InboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
@@ -41,6 +71,36 @@ const ImportReviewRoute = ImportReviewRouteImport.update({
   path: '/import-review',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HeritageRoute = HeritageRouteImport.update({
+  id: '/heritage',
+  path: '/heritage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamiliesRoute = FamiliesRouteImport.update({
+  id: '/families',
+  path: '/families',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaithRoute = FaithRouteImport.update({
+  id: '/faith',
+  path: '/faith',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FactionsRoute = FactionsRouteImport.update({
+  id: '/factions',
+  path: '/factions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CharactersRoute = CharactersRouteImport.update({
+  id: '/characters',
+  path: '/characters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanonRoute = CanonRouteImport.update({
+  id: '/canon',
+  path: '/canon',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,61 +109,144 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/canon': typeof CanonRoute
+  '/characters': typeof CharactersRoute
+  '/factions': typeof FactionsRoute
+  '/faith': typeof FaithRoute
+  '/families': typeof FamiliesRoute
+  '/heritage': typeof HeritageRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
+  '/locations': typeof LocationsRoute
+  '/magic': typeof MagicRoute
+  '/pathways': typeof PathwaysRoute
   '/projects': typeof ProjectsRoute
   '/timeline': typeof TimelineRoute
   '/uploads': typeof UploadsRoute
+  '/worldbuilding': typeof WorldbuildingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/canon': typeof CanonRoute
+  '/characters': typeof CharactersRoute
+  '/factions': typeof FactionsRoute
+  '/faith': typeof FaithRoute
+  '/families': typeof FamiliesRoute
+  '/heritage': typeof HeritageRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
+  '/locations': typeof LocationsRoute
+  '/magic': typeof MagicRoute
+  '/pathways': typeof PathwaysRoute
   '/projects': typeof ProjectsRoute
   '/timeline': typeof TimelineRoute
   '/uploads': typeof UploadsRoute
+  '/worldbuilding': typeof WorldbuildingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/canon': typeof CanonRoute
+  '/characters': typeof CharactersRoute
+  '/factions': typeof FactionsRoute
+  '/faith': typeof FaithRoute
+  '/families': typeof FamiliesRoute
+  '/heritage': typeof HeritageRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
+  '/locations': typeof LocationsRoute
+  '/magic': typeof MagicRoute
+  '/pathways': typeof PathwaysRoute
   '/projects': typeof ProjectsRoute
   '/timeline': typeof TimelineRoute
   '/uploads': typeof UploadsRoute
+  '/worldbuilding': typeof WorldbuildingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/canon'
+    | '/characters'
+    | '/factions'
+    | '/faith'
+    | '/families'
+    | '/heritage'
     | '/import-review'
     | '/inbox'
+    | '/locations'
+    | '/magic'
+    | '/pathways'
     | '/projects'
     | '/timeline'
     | '/uploads'
+    | '/worldbuilding'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/import-review' | '/inbox' | '/projects' | '/timeline' | '/uploads'
+  to:
+    | '/'
+    | '/canon'
+    | '/characters'
+    | '/factions'
+    | '/faith'
+    | '/families'
+    | '/heritage'
+    | '/import-review'
+    | '/inbox'
+    | '/locations'
+    | '/magic'
+    | '/pathways'
+    | '/projects'
+    | '/timeline'
+    | '/uploads'
+    | '/worldbuilding'
   id:
     | '__root__'
     | '/'
+    | '/canon'
+    | '/characters'
+    | '/factions'
+    | '/faith'
+    | '/families'
+    | '/heritage'
     | '/import-review'
     | '/inbox'
+    | '/locations'
+    | '/magic'
+    | '/pathways'
     | '/projects'
     | '/timeline'
     | '/uploads'
+    | '/worldbuilding'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CanonRoute: typeof CanonRoute
+  CharactersRoute: typeof CharactersRoute
+  FactionsRoute: typeof FactionsRoute
+  FaithRoute: typeof FaithRoute
+  FamiliesRoute: typeof FamiliesRoute
+  HeritageRoute: typeof HeritageRoute
   ImportReviewRoute: typeof ImportReviewRoute
   InboxRoute: typeof InboxRoute
+  LocationsRoute: typeof LocationsRoute
+  MagicRoute: typeof MagicRoute
+  PathwaysRoute: typeof PathwaysRoute
   ProjectsRoute: typeof ProjectsRoute
   TimelineRoute: typeof TimelineRoute
   UploadsRoute: typeof UploadsRoute
+  WorldbuildingRoute: typeof WorldbuildingRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/worldbuilding': {
+      id: '/worldbuilding'
+      path: '/worldbuilding'
+      fullPath: '/worldbuilding'
+      preLoaderRoute: typeof WorldbuildingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/uploads': {
       id: '/uploads'
       path: '/uploads'
@@ -125,6 +268,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pathways': {
+      id: '/pathways'
+      path: '/pathways'
+      fullPath: '/pathways'
+      preLoaderRoute: typeof PathwaysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magic': {
+      id: '/magic'
+      path: '/magic'
+      fullPath: '/magic'
+      preLoaderRoute: typeof MagicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations': {
+      id: '/locations'
+      path: '/locations'
+      fullPath: '/locations'
+      preLoaderRoute: typeof LocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/inbox': {
       id: '/inbox'
       path: '/inbox'
@@ -139,6 +303,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImportReviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/heritage': {
+      id: '/heritage'
+      path: '/heritage'
+      fullPath: '/heritage'
+      preLoaderRoute: typeof HeritageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/families': {
+      id: '/families'
+      path: '/families'
+      fullPath: '/families'
+      preLoaderRoute: typeof FamiliesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faith': {
+      id: '/faith'
+      path: '/faith'
+      fullPath: '/faith'
+      preLoaderRoute: typeof FaithRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/factions': {
+      id: '/factions'
+      path: '/factions'
+      fullPath: '/factions'
+      preLoaderRoute: typeof FactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/characters': {
+      id: '/characters'
+      path: '/characters'
+      fullPath: '/characters'
+      preLoaderRoute: typeof CharactersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canon': {
+      id: '/canon'
+      path: '/canon'
+      fullPath: '/canon'
+      preLoaderRoute: typeof CanonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -151,11 +357,21 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CanonRoute: CanonRoute,
+  CharactersRoute: CharactersRoute,
+  FactionsRoute: FactionsRoute,
+  FaithRoute: FaithRoute,
+  FamiliesRoute: FamiliesRoute,
+  HeritageRoute: HeritageRoute,
   ImportReviewRoute: ImportReviewRoute,
   InboxRoute: InboxRoute,
+  LocationsRoute: LocationsRoute,
+  MagicRoute: MagicRoute,
+  PathwaysRoute: PathwaysRoute,
   ProjectsRoute: ProjectsRoute,
   TimelineRoute: TimelineRoute,
   UploadsRoute: UploadsRoute,
+  WorldbuildingRoute: WorldbuildingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
