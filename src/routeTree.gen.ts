@@ -22,6 +22,7 @@ import { Route as MagicRouteImport } from './routes/magic'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as ImportReviewRouteImport } from './routes/import-review'
+import { Route as HubRouteImport } from './routes/hub'
 import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as FamiliesRouteImport } from './routes/families'
@@ -100,6 +101,11 @@ const InboxRoute = InboxRouteImport.update({
 const ImportReviewRoute = ImportReviewRouteImport.update({
   id: '/import-review',
   path: '/import-review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HubRoute = HubRouteImport.update({
+  id: '/hub',
+  path: '/hub',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HeritageRoute = HeritageRouteImport.update({
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/families': typeof FamiliesRoute
   '/glossary': typeof GlossaryRoute
   '/heritage': typeof HeritageRoute
+  '/hub': typeof HubRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
   '/locations': typeof LocationsRoute
@@ -216,6 +223,7 @@ export interface FileRoutesByTo {
   '/families': typeof FamiliesRoute
   '/glossary': typeof GlossaryRoute
   '/heritage': typeof HeritageRoute
+  '/hub': typeof HubRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
   '/locations': typeof LocationsRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/families': typeof FamiliesRoute
   '/glossary': typeof GlossaryRoute
   '/heritage': typeof HeritageRoute
+  '/hub': typeof HubRoute
   '/import-review': typeof ImportReviewRoute
   '/inbox': typeof InboxRoute
   '/locations': typeof LocationsRoute
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/families'
     | '/glossary'
     | '/heritage'
+    | '/hub'
     | '/import-review'
     | '/inbox'
     | '/locations'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/families'
     | '/glossary'
     | '/heritage'
+    | '/hub'
     | '/import-review'
     | '/inbox'
     | '/locations'
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/families'
     | '/glossary'
     | '/heritage'
+    | '/hub'
     | '/import-review'
     | '/inbox'
     | '/locations'
@@ -365,6 +377,7 @@ export interface RootRouteChildren {
   FamiliesRoute: typeof FamiliesRoute
   GlossaryRoute: typeof GlossaryRoute
   HeritageRoute: typeof HeritageRoute
+  HubRoute: typeof HubRoute
   ImportReviewRoute: typeof ImportReviewRoute
   InboxRoute: typeof InboxRoute
   LocationsRoute: typeof LocationsRoute
@@ -472,6 +485,13 @@ declare module '@tanstack/react-router' {
       path: '/import-review'
       fullPath: '/import-review'
       preLoaderRoute: typeof ImportReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hub': {
+      id: '/hub'
+      path: '/hub'
+      fullPath: '/hub'
+      preLoaderRoute: typeof HubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/heritage': {
@@ -589,6 +609,7 @@ const rootRouteChildren: RootRouteChildren = {
   FamiliesRoute: FamiliesRoute,
   GlossaryRoute: GlossaryRoute,
   HeritageRoute: HeritageRoute,
+  HubRoute: HubRoute,
   ImportReviewRoute: ImportReviewRoute,
   InboxRoute: InboxRoute,
   LocationsRoute: LocationsRoute,
