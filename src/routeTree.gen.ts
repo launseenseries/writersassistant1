@@ -11,7 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorldbuildingRouteImport } from './routes/worldbuilding'
 import { Route as UploadsRouteImport } from './routes/uploads'
+import { Route as TrashRouteImport } from './routes/trash'
 import { Route as TimelineRouteImport } from './routes/timeline'
+import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RetconsRouteImport } from './routes/retcons'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as PathwaysRouteImport } from './routes/pathways'
 import { Route as MagicRouteImport } from './routes/magic'
@@ -22,6 +26,8 @@ import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as FamiliesRouteImport } from './routes/families'
 import { Route as FaithRouteImport } from './routes/faith'
 import { Route as FactionsRouteImport } from './routes/factions'
+import { Route as ExportsRouteImport } from './routes/exports'
+import { Route as ContinuityRouteImport } from './routes/continuity'
 import { Route as CharactersRouteImport } from './routes/characters'
 import { Route as CanonRouteImport } from './routes/canon'
 import { Route as IndexRouteImport } from './routes/index'
@@ -36,9 +42,29 @@ const UploadsRoute = UploadsRouteImport.update({
   path: '/uploads',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrashRoute = TrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TimelineRoute = TimelineRouteImport.update({
   id: '/timeline',
   path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TemplatesRoute = TemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RetconsRoute = RetconsRouteImport.update({
+  id: '/retcons',
+  path: '/retcons',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsRoute = ProjectsRouteImport.update({
@@ -91,6 +117,16 @@ const FactionsRoute = FactionsRouteImport.update({
   path: '/factions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExportsRoute = ExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContinuityRoute = ContinuityRouteImport.update({
+  id: '/continuity',
+  path: '/continuity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CharactersRoute = CharactersRouteImport.update({
   id: '/characters',
   path: '/characters',
@@ -111,6 +147,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/canon': typeof CanonRoute
   '/characters': typeof CharactersRoute
+  '/continuity': typeof ContinuityRoute
+  '/exports': typeof ExportsRoute
   '/factions': typeof FactionsRoute
   '/faith': typeof FaithRoute
   '/families': typeof FamiliesRoute
@@ -121,7 +159,11 @@ export interface FileRoutesByFullPath {
   '/magic': typeof MagicRoute
   '/pathways': typeof PathwaysRoute
   '/projects': typeof ProjectsRoute
+  '/retcons': typeof RetconsRoute
+  '/settings': typeof SettingsRoute
+  '/templates': typeof TemplatesRoute
   '/timeline': typeof TimelineRoute
+  '/trash': typeof TrashRoute
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
 }
@@ -129,6 +171,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/canon': typeof CanonRoute
   '/characters': typeof CharactersRoute
+  '/continuity': typeof ContinuityRoute
+  '/exports': typeof ExportsRoute
   '/factions': typeof FactionsRoute
   '/faith': typeof FaithRoute
   '/families': typeof FamiliesRoute
@@ -139,7 +183,11 @@ export interface FileRoutesByTo {
   '/magic': typeof MagicRoute
   '/pathways': typeof PathwaysRoute
   '/projects': typeof ProjectsRoute
+  '/retcons': typeof RetconsRoute
+  '/settings': typeof SettingsRoute
+  '/templates': typeof TemplatesRoute
   '/timeline': typeof TimelineRoute
+  '/trash': typeof TrashRoute
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
 }
@@ -148,6 +196,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/canon': typeof CanonRoute
   '/characters': typeof CharactersRoute
+  '/continuity': typeof ContinuityRoute
+  '/exports': typeof ExportsRoute
   '/factions': typeof FactionsRoute
   '/faith': typeof FaithRoute
   '/families': typeof FamiliesRoute
@@ -158,7 +208,11 @@ export interface FileRoutesById {
   '/magic': typeof MagicRoute
   '/pathways': typeof PathwaysRoute
   '/projects': typeof ProjectsRoute
+  '/retcons': typeof RetconsRoute
+  '/settings': typeof SettingsRoute
+  '/templates': typeof TemplatesRoute
   '/timeline': typeof TimelineRoute
+  '/trash': typeof TrashRoute
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
 }
@@ -168,6 +222,8 @@ export interface FileRouteTypes {
     | '/'
     | '/canon'
     | '/characters'
+    | '/continuity'
+    | '/exports'
     | '/factions'
     | '/faith'
     | '/families'
@@ -178,7 +234,11 @@ export interface FileRouteTypes {
     | '/magic'
     | '/pathways'
     | '/projects'
+    | '/retcons'
+    | '/settings'
+    | '/templates'
     | '/timeline'
+    | '/trash'
     | '/uploads'
     | '/worldbuilding'
   fileRoutesByTo: FileRoutesByTo
@@ -186,6 +246,8 @@ export interface FileRouteTypes {
     | '/'
     | '/canon'
     | '/characters'
+    | '/continuity'
+    | '/exports'
     | '/factions'
     | '/faith'
     | '/families'
@@ -196,7 +258,11 @@ export interface FileRouteTypes {
     | '/magic'
     | '/pathways'
     | '/projects'
+    | '/retcons'
+    | '/settings'
+    | '/templates'
     | '/timeline'
+    | '/trash'
     | '/uploads'
     | '/worldbuilding'
   id:
@@ -204,6 +270,8 @@ export interface FileRouteTypes {
     | '/'
     | '/canon'
     | '/characters'
+    | '/continuity'
+    | '/exports'
     | '/factions'
     | '/faith'
     | '/families'
@@ -214,7 +282,11 @@ export interface FileRouteTypes {
     | '/magic'
     | '/pathways'
     | '/projects'
+    | '/retcons'
+    | '/settings'
+    | '/templates'
     | '/timeline'
+    | '/trash'
     | '/uploads'
     | '/worldbuilding'
   fileRoutesById: FileRoutesById
@@ -223,6 +295,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CanonRoute: typeof CanonRoute
   CharactersRoute: typeof CharactersRoute
+  ContinuityRoute: typeof ContinuityRoute
+  ExportsRoute: typeof ExportsRoute
   FactionsRoute: typeof FactionsRoute
   FaithRoute: typeof FaithRoute
   FamiliesRoute: typeof FamiliesRoute
@@ -233,7 +307,11 @@ export interface RootRouteChildren {
   MagicRoute: typeof MagicRoute
   PathwaysRoute: typeof PathwaysRoute
   ProjectsRoute: typeof ProjectsRoute
+  RetconsRoute: typeof RetconsRoute
+  SettingsRoute: typeof SettingsRoute
+  TemplatesRoute: typeof TemplatesRoute
   TimelineRoute: typeof TimelineRoute
+  TrashRoute: typeof TrashRoute
   UploadsRoute: typeof UploadsRoute
   WorldbuildingRoute: typeof WorldbuildingRoute
 }
@@ -254,11 +332,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UploadsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trash': {
+      id: '/trash'
+      path: '/trash'
+      fullPath: '/trash'
+      preLoaderRoute: typeof TrashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/timeline': {
       id: '/timeline'
       path: '/timeline'
       fullPath: '/timeline'
       preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/templates': {
+      id: '/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof TemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/retcons': {
+      id: '/retcons'
+      path: '/retcons'
+      fullPath: '/retcons'
+      preLoaderRoute: typeof RetconsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects': {
@@ -331,6 +437,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FactionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/exports': {
+      id: '/exports'
+      path: '/exports'
+      fullPath: '/exports'
+      preLoaderRoute: typeof ExportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/continuity': {
+      id: '/continuity'
+      path: '/continuity'
+      fullPath: '/continuity'
+      preLoaderRoute: typeof ContinuityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/characters': {
       id: '/characters'
       path: '/characters'
@@ -359,6 +479,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CanonRoute: CanonRoute,
   CharactersRoute: CharactersRoute,
+  ContinuityRoute: ContinuityRoute,
+  ExportsRoute: ExportsRoute,
   FactionsRoute: FactionsRoute,
   FaithRoute: FaithRoute,
   FamiliesRoute: FamiliesRoute,
@@ -369,7 +491,11 @@ const rootRouteChildren: RootRouteChildren = {
   MagicRoute: MagicRoute,
   PathwaysRoute: PathwaysRoute,
   ProjectsRoute: ProjectsRoute,
+  RetconsRoute: RetconsRoute,
+  SettingsRoute: SettingsRoute,
+  TemplatesRoute: TemplatesRoute,
   TimelineRoute: TimelineRoute,
+  TrashRoute: TrashRoute,
   UploadsRoute: UploadsRoute,
   WorldbuildingRoute: WorldbuildingRoute,
 }
