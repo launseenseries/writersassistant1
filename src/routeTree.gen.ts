@@ -9,8 +9,134 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorldbuildingRouteImport } from './routes/worldbuilding'
+import { Route as UploadsRouteImport } from './routes/uploads'
+import { Route as TrashRouteImport } from './routes/trash'
+import { Route as TimelineRouteImport } from './routes/timeline'
+import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RetconsRouteImport } from './routes/retcons'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as PathwaysRouteImport } from './routes/pathways'
+import { Route as MagicRouteImport } from './routes/magic'
+import { Route as LocationsRouteImport } from './routes/locations'
+import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as ImportReviewRouteImport } from './routes/import-review'
+import { Route as HeritageRouteImport } from './routes/heritage'
+import { Route as FamiliesRouteImport } from './routes/families'
+import { Route as FaithRouteImport } from './routes/faith'
+import { Route as FactionsRouteImport } from './routes/factions'
+import { Route as ExportsRouteImport } from './routes/exports'
+import { Route as ContinuityRouteImport } from './routes/continuity'
+import { Route as CharactersRouteImport } from './routes/characters'
+import { Route as CanonRouteImport } from './routes/canon'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorldbuildingRoute = WorldbuildingRouteImport.update({
+  id: '/worldbuilding',
+  path: '/worldbuilding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadsRoute = UploadsRouteImport.update({
+  id: '/uploads',
+  path: '/uploads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrashRoute = TrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TemplatesRoute = TemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RetconsRoute = RetconsRouteImport.update({
+  id: '/retcons',
+  path: '/retcons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PathwaysRoute = PathwaysRouteImport.update({
+  id: '/pathways',
+  path: '/pathways',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MagicRoute = MagicRouteImport.update({
+  id: '/magic',
+  path: '/magic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsRoute = LocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InboxRoute = InboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportReviewRoute = ImportReviewRouteImport.update({
+  id: '/import-review',
+  path: '/import-review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeritageRoute = HeritageRouteImport.update({
+  id: '/heritage',
+  path: '/heritage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamiliesRoute = FamiliesRouteImport.update({
+  id: '/families',
+  path: '/families',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaithRoute = FaithRouteImport.update({
+  id: '/faith',
+  path: '/faith',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FactionsRoute = FactionsRouteImport.update({
+  id: '/factions',
+  path: '/factions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportsRoute = ExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContinuityRoute = ContinuityRouteImport.update({
+  id: '/continuity',
+  path: '/continuity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CharactersRoute = CharactersRouteImport.update({
+  id: '/characters',
+  path: '/characters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanonRoute = CanonRouteImport.update({
+  id: '/canon',
+  path: '/canon',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +145,326 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/canon': typeof CanonRoute
+  '/characters': typeof CharactersRoute
+  '/continuity': typeof ContinuityRoute
+  '/exports': typeof ExportsRoute
+  '/factions': typeof FactionsRoute
+  '/faith': typeof FaithRoute
+  '/families': typeof FamiliesRoute
+  '/heritage': typeof HeritageRoute
+  '/import-review': typeof ImportReviewRoute
+  '/inbox': typeof InboxRoute
+  '/locations': typeof LocationsRoute
+  '/magic': typeof MagicRoute
+  '/pathways': typeof PathwaysRoute
+  '/projects': typeof ProjectsRoute
+  '/retcons': typeof RetconsRoute
+  '/settings': typeof SettingsRoute
+  '/templates': typeof TemplatesRoute
+  '/timeline': typeof TimelineRoute
+  '/trash': typeof TrashRoute
+  '/uploads': typeof UploadsRoute
+  '/worldbuilding': typeof WorldbuildingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/canon': typeof CanonRoute
+  '/characters': typeof CharactersRoute
+  '/continuity': typeof ContinuityRoute
+  '/exports': typeof ExportsRoute
+  '/factions': typeof FactionsRoute
+  '/faith': typeof FaithRoute
+  '/families': typeof FamiliesRoute
+  '/heritage': typeof HeritageRoute
+  '/import-review': typeof ImportReviewRoute
+  '/inbox': typeof InboxRoute
+  '/locations': typeof LocationsRoute
+  '/magic': typeof MagicRoute
+  '/pathways': typeof PathwaysRoute
+  '/projects': typeof ProjectsRoute
+  '/retcons': typeof RetconsRoute
+  '/settings': typeof SettingsRoute
+  '/templates': typeof TemplatesRoute
+  '/timeline': typeof TimelineRoute
+  '/trash': typeof TrashRoute
+  '/uploads': typeof UploadsRoute
+  '/worldbuilding': typeof WorldbuildingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/canon': typeof CanonRoute
+  '/characters': typeof CharactersRoute
+  '/continuity': typeof ContinuityRoute
+  '/exports': typeof ExportsRoute
+  '/factions': typeof FactionsRoute
+  '/faith': typeof FaithRoute
+  '/families': typeof FamiliesRoute
+  '/heritage': typeof HeritageRoute
+  '/import-review': typeof ImportReviewRoute
+  '/inbox': typeof InboxRoute
+  '/locations': typeof LocationsRoute
+  '/magic': typeof MagicRoute
+  '/pathways': typeof PathwaysRoute
+  '/projects': typeof ProjectsRoute
+  '/retcons': typeof RetconsRoute
+  '/settings': typeof SettingsRoute
+  '/templates': typeof TemplatesRoute
+  '/timeline': typeof TimelineRoute
+  '/trash': typeof TrashRoute
+  '/uploads': typeof UploadsRoute
+  '/worldbuilding': typeof WorldbuildingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/canon'
+    | '/characters'
+    | '/continuity'
+    | '/exports'
+    | '/factions'
+    | '/faith'
+    | '/families'
+    | '/heritage'
+    | '/import-review'
+    | '/inbox'
+    | '/locations'
+    | '/magic'
+    | '/pathways'
+    | '/projects'
+    | '/retcons'
+    | '/settings'
+    | '/templates'
+    | '/timeline'
+    | '/trash'
+    | '/uploads'
+    | '/worldbuilding'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/canon'
+    | '/characters'
+    | '/continuity'
+    | '/exports'
+    | '/factions'
+    | '/faith'
+    | '/families'
+    | '/heritage'
+    | '/import-review'
+    | '/inbox'
+    | '/locations'
+    | '/magic'
+    | '/pathways'
+    | '/projects'
+    | '/retcons'
+    | '/settings'
+    | '/templates'
+    | '/timeline'
+    | '/trash'
+    | '/uploads'
+    | '/worldbuilding'
+  id:
+    | '__root__'
+    | '/'
+    | '/canon'
+    | '/characters'
+    | '/continuity'
+    | '/exports'
+    | '/factions'
+    | '/faith'
+    | '/families'
+    | '/heritage'
+    | '/import-review'
+    | '/inbox'
+    | '/locations'
+    | '/magic'
+    | '/pathways'
+    | '/projects'
+    | '/retcons'
+    | '/settings'
+    | '/templates'
+    | '/timeline'
+    | '/trash'
+    | '/uploads'
+    | '/worldbuilding'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CanonRoute: typeof CanonRoute
+  CharactersRoute: typeof CharactersRoute
+  ContinuityRoute: typeof ContinuityRoute
+  ExportsRoute: typeof ExportsRoute
+  FactionsRoute: typeof FactionsRoute
+  FaithRoute: typeof FaithRoute
+  FamiliesRoute: typeof FamiliesRoute
+  HeritageRoute: typeof HeritageRoute
+  ImportReviewRoute: typeof ImportReviewRoute
+  InboxRoute: typeof InboxRoute
+  LocationsRoute: typeof LocationsRoute
+  MagicRoute: typeof MagicRoute
+  PathwaysRoute: typeof PathwaysRoute
+  ProjectsRoute: typeof ProjectsRoute
+  RetconsRoute: typeof RetconsRoute
+  SettingsRoute: typeof SettingsRoute
+  TemplatesRoute: typeof TemplatesRoute
+  TimelineRoute: typeof TimelineRoute
+  TrashRoute: typeof TrashRoute
+  UploadsRoute: typeof UploadsRoute
+  WorldbuildingRoute: typeof WorldbuildingRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/worldbuilding': {
+      id: '/worldbuilding'
+      path: '/worldbuilding'
+      fullPath: '/worldbuilding'
+      preLoaderRoute: typeof WorldbuildingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/uploads': {
+      id: '/uploads'
+      path: '/uploads'
+      fullPath: '/uploads'
+      preLoaderRoute: typeof UploadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trash': {
+      id: '/trash'
+      path: '/trash'
+      fullPath: '/trash'
+      preLoaderRoute: typeof TrashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/templates': {
+      id: '/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof TemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/retcons': {
+      id: '/retcons'
+      path: '/retcons'
+      fullPath: '/retcons'
+      preLoaderRoute: typeof RetconsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pathways': {
+      id: '/pathways'
+      path: '/pathways'
+      fullPath: '/pathways'
+      preLoaderRoute: typeof PathwaysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magic': {
+      id: '/magic'
+      path: '/magic'
+      fullPath: '/magic'
+      preLoaderRoute: typeof MagicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations': {
+      id: '/locations'
+      path: '/locations'
+      fullPath: '/locations'
+      preLoaderRoute: typeof LocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inbox': {
+      id: '/inbox'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import-review': {
+      id: '/import-review'
+      path: '/import-review'
+      fullPath: '/import-review'
+      preLoaderRoute: typeof ImportReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heritage': {
+      id: '/heritage'
+      path: '/heritage'
+      fullPath: '/heritage'
+      preLoaderRoute: typeof HeritageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/families': {
+      id: '/families'
+      path: '/families'
+      fullPath: '/families'
+      preLoaderRoute: typeof FamiliesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faith': {
+      id: '/faith'
+      path: '/faith'
+      fullPath: '/faith'
+      preLoaderRoute: typeof FaithRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/factions': {
+      id: '/factions'
+      path: '/factions'
+      fullPath: '/factions'
+      preLoaderRoute: typeof FactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exports': {
+      id: '/exports'
+      path: '/exports'
+      fullPath: '/exports'
+      preLoaderRoute: typeof ExportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/continuity': {
+      id: '/continuity'
+      path: '/continuity'
+      fullPath: '/continuity'
+      preLoaderRoute: typeof ContinuityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/characters': {
+      id: '/characters'
+      path: '/characters'
+      fullPath: '/characters'
+      preLoaderRoute: typeof CharactersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canon': {
+      id: '/canon'
+      path: '/canon'
+      fullPath: '/canon'
+      preLoaderRoute: typeof CanonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +477,28 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CanonRoute: CanonRoute,
+  CharactersRoute: CharactersRoute,
+  ContinuityRoute: ContinuityRoute,
+  ExportsRoute: ExportsRoute,
+  FactionsRoute: FactionsRoute,
+  FaithRoute: FaithRoute,
+  FamiliesRoute: FamiliesRoute,
+  HeritageRoute: HeritageRoute,
+  ImportReviewRoute: ImportReviewRoute,
+  InboxRoute: InboxRoute,
+  LocationsRoute: LocationsRoute,
+  MagicRoute: MagicRoute,
+  PathwaysRoute: PathwaysRoute,
+  ProjectsRoute: ProjectsRoute,
+  RetconsRoute: RetconsRoute,
+  SettingsRoute: SettingsRoute,
+  TemplatesRoute: TemplatesRoute,
+  TimelineRoute: TimelineRoute,
+  TrashRoute: TrashRoute,
+  UploadsRoute: UploadsRoute,
+  WorldbuildingRoute: WorldbuildingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
