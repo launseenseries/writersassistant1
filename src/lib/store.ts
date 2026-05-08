@@ -396,10 +396,11 @@ export const useStore = create<State>()(
       },
       rejectSuggestion: (id) => set((s) => ({ suggestions: s.suggestions.map((x) => x.id === id ? { ...x, status: "rejected" } : x) })),
       runExtraction: (sourceId) => {
-        const src = get().items.find((i) => i.id === sourceId) as SourceUpload | undefined;
+        const src = get().items.find((i) => i.id === sourceId) as any;
         if (!src) return 0;
+        const rawText: string = src.rawText || src.data?.rawText || src.description || "";
         const existing = get().suggestions.filter((s) => s.sourceUploadId === sourceId).map((s) => s.suggestedTitle.toLowerCase());
-        const found = extractFromText(src.rawText).filter((s) => !existing.includes(s.name.toLowerCase()));
+        const found = extractFromText(rawText).filter((s) => !existing.includes(s.name.toLowerCase()));
         const newSugs: ImportSuggestion[] = found.map((s) => ({
           id: uid(), projectId: src.projectId, sourceUploadId: sourceId,
           suggestedTitle: s.name, suggestedCategory: s.category, excerpt: s.excerpt,
