@@ -176,6 +176,37 @@ interface State {
 const now = () => new Date().toISOString();
 const uid = () => Math.random().toString(36).slice(2, 10);
 
+// Fire-and-forget audit logger (lazy import to avoid circular dep)
+function audit(action: string, opts?: { entityType?: string; entityId?: string; entityName?: string; details?: any }) {
+  import("./audit").then(({ logAudit }) => logAudit(action, opts)).catch(() => {});
+}
+
+// Debounced auto-refresh of project summary/tone/setting after approvals
+let summaryTimer: ReturnType<typeof setTimeout> | null = null;
+function scheduleSummaryRefresh() {
+  if (summaryTimer) clearTimeout(summaryTimer);
+  summaryTimer = setTimeout(async () => {
+    try {
+      const state = useStore.getState();
+      const project = state.projects.find((p) => p.id === state.currentProjectId);
+      if (!project) return;
+      const sources = state.items
+        .filter((i) => i.projectId === project.id && i.type === "source" && !i.deleted)
+        .slice(-10)
+        .map((s: any) => ({ name: s.name, text: (s.data?.rawText || (s as any).rawText || s.description || "").slice(0, 4000) }));
+      if (!sources.length) return;
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources, mode: "summary" } });
+      if (error || !data || data.error) return;
+      state.updateProject(project.id, {
+        settingSummary: data.summary || project.settingSummary,
+        toneNotes: data.tone || project.toneNotes,
+      });
+      audit("auto_refresh_summary", { entityType: "project", entityId: project.id, entityName: project.title });
+    } catch { /* silent */ }
+  }, 4000);
+}
+
 const STOPWORDS = new Set(["The","And","But","Or","A","An","Of","To","In","On","At","For","From","With","By","As","Is","Are","Was","Were","Be","Been","Being","It","This","That","These","Those","He","She","They","We","I","You","His","Her","Their","Our","My","Your","If","Not","So","Do","Did","Has","Have","Had","Will","Would","Could","Should"]);
 
 function extractFromText(text: string): { name: string; category: EntityType; reason: string; confidence: number; excerpt: string }[] {
