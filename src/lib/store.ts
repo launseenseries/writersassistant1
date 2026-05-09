@@ -252,15 +252,15 @@ function extractFromText(text: string): { name: string; category: EntityType; re
 }
 
 function seed(): Pick<State, "projects" | "currentProjectId" | "items" | "suggestions" | "templates"> {
-  const pid = "demo-la-unseen";
+  const pid = "demo-oz";
   const project: Project = {
     id: pid,
-    title: "LA Unseen Demo",
-    genre: "Urban Fantasy",
-    settingSummary: "LA Unseen is an urban fantasy story set in a hidden magical version of Los Angeles, beginning in 2025 as the veil between worlds starts weakening. Everyday neighborhoods, schools, and landmarks exist alongside a secret Magi society, with LASMA, an elite magical academy in Hollywood, at the center. As powerful young Magi come of age, they must navigate magic, identity, danger, and the systems deciding who gets protected and who gets watched.",
-    toneNotes: "Contemporary urban fantasy with an LA street-level edge, blending magical danger, teen drama, institutional power, social commentary, and emotional coming-of-age. The tone should feel grounded, cinematic, tense, stylish, and culturally specific, with moments of humor, vulnerability, and supernatural awe.",
+    title: "The Wonderful Wizard of Oz (Demo)",
+    genre: "Classic Fantasy",
+    settingSummary: "A young Kansas farm girl named Dorothy is swept by a cyclone into the magical Land of Oz. To return home she must travel the yellow brick road to the Emerald City and seek help from the mysterious Wizard, gathering unlikely companions along the way.",
+    toneNotes: "Whimsical, warm, and wondrous with moments of peril and gentle moral lesson. The voice is plainspoken and fairy-tale, anchored by friendship, courage, and the longing for home.",
     series: true,
-    startDate: "2025-01-01",
+    startDate: "1900-01-01",
     createdAt: now(),
     updatedAt: now(),
   };
@@ -270,80 +270,78 @@ function seed(): Pick<State, "projects" | "currentProjectId" | "items" | "sugges
   });
 
   const items: BaseItem[] = [
-    mk("character", "Valentina Jones", { description: "Powerful young Magi at the center of LASMA's attention.", canonStatus: "Confirmed Canon" }),
-    mk("character", "Jezebel \"Belle\" Brooks", { description: "Magi student, fierce friend." }),
-    mk("character", "Diego Alvarez", { description: "Magi student from the neighborhood." }),
-    mk("character", "Aminah Sadiq", { description: "Magi student of Sudanese heritage." }),
-    mk("location", "Los Angeles", { description: "City setting, both mundane and magical." }),
-    mk("location", "Hollywood", { description: "Home of LASMA academy." }),
-    mk("location", "LASMA", { description: "Los Angeles Society of Magickal Arts academy." }),
-    mk("location", "Baldwin Village", { description: "Neighborhood with cultural significance." }),
-    mk("faction", "LASMA", { description: "Elite magical academy and institution." }),
-    mk("faction", "Magickal Risk Registry", { description: "Surveillance system for Magi deemed risky." }),
-    mk("faction", "Urban Magickal Enforcement", { description: "Magical law enforcement." }),
-    mk("family", "Jones Family", { description: "Valentina's family." }),
-    mk("family", "Sadiq Family", { description: "Aminah's family." }),
-    mk("heritage", "Sudanese heritage", { description: "Cultural background of the Sadiq family." }),
-    mk("heritage", "Los Angeles neighborhood culture", { description: "Local cultural identity." }),
-    mk("faith", "Islam", { description: "Faith tradition of the Sadiq family." }),
-    mk("magic", "The Veil", { description: "Boundary between mundane and magical worlds." }),
-    mk("timeline", "Story begins in 2025", { description: "Opening of the story.", canonStatus: "Confirmed Canon", data: { exactDate: "2025-01-01", orderIndex: 0 } }) as TimelineEvent,
-    mk("timeline", "Valentina receives LASMA attention", { data: { approxLabel: "Spring 2025", orderIndex: 1 } }),
-    mk("timeline", "Students arrive at LASMA", { data: { approxLabel: "Fall 2025", orderIndex: 2 } }),
-    mk("timeline", "The veil begins weakening", { canonStatus: "Soft Canon", data: { approxLabel: "Late 2025", orderIndex: 3, needsReview: true } }),
-    mk("continuity", "Some events need exact dates before the full timeline can be confirmed.", {
-      description: "Several timeline events lack precise dates.",
+    mk("character", "Dorothy Gale", { description: "A kind young girl from Kansas, swept to Oz with her dog Toto." }),
+    mk("character", "Scarecrow", { description: "Stuffed with straw, longs for a brain." }),
+    mk("character", "Tin Woodman", { description: "A man of tin who wishes for a heart." }),
+    mk("character", "Cowardly Lion", { description: "A lion who seeks courage." }),
+    mk("character", "Toto", { description: "Dorothy's loyal little black dog." }),
+    mk("character", "The Wizard of Oz", { description: "The mysterious ruler of the Emerald City." }),
+    mk("character", "Glinda", { description: "The Good Witch of the South." }),
+    mk("character", "Wicked Witch of the West", { description: "Tyrant of the Winkie Country, fears water." }),
+    mk("location", "Kansas", { description: "Dorothy's grey home prairie." }),
+    mk("location", "Land of Oz", { description: "The magical land Dorothy is carried to." }),
+    mk("location", "Munchkin Country", { description: "Eastern land of small folk in blue." }),
+    mk("location", "Emerald City", { description: "The shining capital of Oz." }),
+    mk("location", "Yellow Brick Road", { description: "Path leading to the Emerald City." }),
+    mk("location", "Winkie Country", { description: "Western land ruled by the Wicked Witch." }),
+    mk("faction", "Munchkins", { description: "Peaceful villagers of the East." }),
+    mk("faction", "Winged Monkeys", { description: "Bound to serve the holder of the Golden Cap." }),
+    mk("faction", "Quadlings", { description: "People of the South, ruled by Glinda." }),
+    mk("family", "Gale Family", { description: "Aunt Em and Uncle Henry, Dorothy's guardians." }),
+    mk("heritage", "Kansas farming life", { description: "Hard, grey prairie upbringing." }),
+    mk("faith", "Belief in the Wizard", { description: "Reverence for the unseen ruler of Oz." }),
+    mk("magic", "Silver Shoes", { description: "Magic shoes from the Wicked Witch of the East — can carry the wearer anywhere." }),
+    mk("magic", "Golden Cap", { description: "Commands the Winged Monkeys three times." }),
+    mk("timeline", "The cyclone carries Dorothy to Oz", { description: "Opening event.", canonStatus: "Confirmed Canon", data: { exactDate: "1900-05-01", orderIndex: 0 } }) as TimelineEvent,
+    mk("timeline", "Dorothy meets the Scarecrow", { data: { approxLabel: "Day 2", orderIndex: 1 } }),
+    mk("timeline", "The companions reach the Emerald City", { data: { approxLabel: "Week 1", orderIndex: 2 } }),
+    mk("timeline", "Dorothy melts the Wicked Witch of the West", { canonStatus: "Confirmed Canon", data: { approxLabel: "Week 3", orderIndex: 3 } }),
+    mk("timeline", "Dorothy returns to Kansas", { canonStatus: "Soft Canon", data: { approxLabel: "End", orderIndex: 4, needsReview: true } }),
+    mk("continuity", "Confirm exact day count for the journey to the Emerald City.", {
+      description: "Travel time across chapters is approximate.",
       canonStatus: "Needs Review",
-      data: { severity: "medium", status: "Unresolved" },
+      data: { severity: "low", status: "Unresolved" },
     }),
   ];
 
   // Pathways
-  const charValentina = items.find((i) => i.name === "Valentina Jones")!;
-  const lasma = items.find((i) => i.type === "faction" && i.name === "LASMA")!;
-  const veil = items.find((i) => i.name === "The Veil")!;
-  const ev1 = items.find((i) => i.name === "Valentina receives LASMA attention")!;
-  const ev2 = items.find((i) => i.name === "Students arrive at LASMA")!;
+  const dorothy = items.find((i) => i.name === "Dorothy Gale")!;
+  const emerald = items.find((i) => i.name === "Emerald City")!;
+  const ev1 = items.find((i) => i.name === "Dorothy meets the Scarecrow")!;
+  const ev2 = items.find((i) => i.name === "The companions reach the Emerald City")!;
+  const witch = items.find((i) => i.name === "Wicked Witch of the West")!;
 
   const pathway1: Pathway = {
-    ...mk("pathway", "Valentina's LASMA Pathway", { description: "Valentina's journey through LASMA." }),
+    ...mk("pathway", "Dorothy's Journey to Oz", { description: "Dorothy's path from Kansas to the Emerald City." }),
     type: "pathway", pathwayType: "Character Pathway", orderMode: "story",
     nodes: [
-      { id: uid(), linkedItemId: charValentina.id, linkedItemType: "character", displayName: charValentina.name, orderIndex: 0 },
+      { id: uid(), linkedItemId: dorothy.id, linkedItemType: "character", displayName: dorothy.name, orderIndex: 0 },
       { id: uid(), linkedItemId: ev1.id, linkedItemType: "timeline", displayName: ev1.name, orderIndex: 1 },
-      { id: uid(), linkedItemId: lasma.id, linkedItemType: "faction", displayName: lasma.name, orderIndex: 2 },
+      { id: uid(), linkedItemId: ev2.id, linkedItemType: "timeline", displayName: ev2.name, orderIndex: 2 },
+      { id: uid(), linkedItemId: emerald.id, linkedItemType: "location", displayName: emerald.name, orderIndex: 3 },
     ],
     connections: [],
   } as Pathway;
   const pathway2: Pathway = {
-    ...mk("pathway", "Veil Weakening Pathway", { description: "Tracks the weakening veil." }),
-    type: "pathway", pathwayType: "Magic / Power Pathway", orderMode: "chronological",
+    ...mk("pathway", "Wicked Witch Conflict Pathway", { description: "Tracks the conflict with the Wicked Witch of the West." }),
+    type: "pathway", pathwayType: "Antagonist Pathway", orderMode: "chronological",
     nodes: [
-      { id: uid(), linkedItemId: veil.id, linkedItemType: "magic", displayName: veil.name, orderIndex: 0 },
-      { id: uid(), linkedItemId: ev2.id, linkedItemType: "timeline", displayName: ev2.name, orderIndex: 1 },
+      { id: uid(), linkedItemId: witch.id, linkedItemType: "character", displayName: witch.name, orderIndex: 0 },
+      { id: uid(), linkedItemId: dorothy.id, linkedItemType: "character", displayName: dorothy.name, orderIndex: 1 },
     ],
     connections: [],
   } as Pathway;
-  const pathway3: Pathway = {
-    ...mk("pathway", "LASMA Institutional Power Pathway", { description: "Institutional power dynamics." }),
-    type: "pathway", pathwayType: "Faction Pathway", orderMode: "story",
-    nodes: [
-      { id: uid(), linkedItemId: lasma.id, linkedItemType: "faction", displayName: lasma.name, orderIndex: 0 },
-    ],
-    connections: [],
-  } as Pathway;
-  items.push(pathway1, pathway2, pathway3);
+  items.push(pathway1, pathway2);
 
   // Sample source upload
-  const sourceText = `Chapter 1. Valentina Jones arrives at LASMA in Hollywood. The Magickal Risk Registry has flagged her name. Belle Brooks meets her at the gates. The veil weakens over Baldwin Village that night.`;
+  const sourceText = `Chapter 1. Dorothy lived in the midst of the great Kansas prairies with Uncle Henry and Aunt Em. A great cyclone lifted the little house high into the air and carried it to the Land of Oz. There she met the Munchkins and the Good Witch of the North, who told her to follow the Yellow Brick Road to the Emerald City and ask the Wizard of Oz for help.`;
   const source: SourceUpload = {
-    ...mk("source", "Chapter 1 — Arrival", { canonStatus: "Draft", description: "Pasted opening chapter." }),
+    ...mk("source", "Chapter 1 — The Cyclone", { canonStatus: "Draft", description: "Pasted opening chapter." }),
     type: "source", sourceType: "Chapter", rawText: sourceText,
-    uploadOrder: 1, storyOrder: 1, chapter: 1, pov: "Valentina Jones", storyDate: "2025-09-01",
+    uploadOrder: 1, storyOrder: 1, chapter: 1, pov: "Dorothy Gale", storyDate: "1900-05-01",
   } as SourceUpload;
   items.push(source);
 
-  // Generate suggestions from that source for demo
   const suggestions: ImportSuggestion[] = extractFromText(sourceText).map((s) => ({
     id: uid(), projectId: pid, sourceUploadId: source.id,
     suggestedTitle: s.name, suggestedCategory: s.category, excerpt: s.excerpt,
