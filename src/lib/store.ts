@@ -381,10 +381,17 @@ export const useStore = create<State>()(
           createdAt: now(), updatedAt: now(),
         };
         set((s) => ({ projects: [...s.projects, proj], currentProjectId: proj.id }));
+        audit("create_project", { entityType: "project", entityId: proj.id, entityName: proj.title });
         return proj;
       },
-      updateProject: (id, patch) => set((s) => ({ projects: s.projects.map((p) => p.id === id ? { ...p, ...patch, updatedAt: now() } : p) })),
-      deleteProject: (id) => set((s) => ({ projects: s.projects.map((p) => p.id === id ? { ...p, deleted: true } : p) })),
+      updateProject: (id, patch) => {
+        set((s) => ({ projects: s.projects.map((p) => p.id === id ? { ...p, ...patch, updatedAt: now() } : p) }));
+        audit("update_project", { entityType: "project", entityId: id, details: Object.keys(patch) });
+      },
+      deleteProject: (id) => {
+        set((s) => ({ projects: s.projects.map((p) => p.id === id ? { ...p, deleted: true } : p) }));
+        audit("delete_project", { entityType: "project", entityId: id });
+      },
       addItem: (i) => {
         const item: BaseItem = {
           id: uid(), projectId: i.projectId || get().currentProjectId, type: i.type,
@@ -393,29 +400,57 @@ export const useStore = create<State>()(
           versions: [], links: i.links || [], data: i.data || {}, sourceUploadIds: i.sourceUploadIds || [],
         };
         set((s) => ({ items: [...s.items, item] }));
+        audit("create", { entityType: item.type, entityId: item.id, entityName: item.name });
         return item;
       },
-      updateItem: (id, patch, mode = "overwrite") => set((s) => ({
-        items: s.items.map((it) => {
-          if (it.id !== id) return it;
-          const versions = mode === "version"
-            ? [...it.versions, { version: it.versions.length + 1, snapshot: { ...it }, createdAt: now() }]
-            : it.versions;
-          return { ...it, ...patch, updatedAt: now(), versions };
-        }),
-      })),
-      duplicateItem: (id) => set((s) => {
-        const orig = s.items.find((i) => i.id === id);
-        if (!orig) return {};
-        const copy: BaseItem = { ...orig, id: uid(), name: orig.name + " (Copy)", createdAt: now(), updatedAt: now(), versions: [] };
-        return { items: [...s.items, copy] };
-      }),
-      deleteItems: (ids) => set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, deleted: true, updatedAt: now() } : i) })),
-      restoreItems: (ids) => set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, deleted: false, updatedAt: now() } : i) })),
-      hardDeleteItems: (ids) => set((s) => ({ items: s.items.filter((i) => !ids.includes(i.id)) })),
-      archiveItems: (ids, archived) => set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, archived, updatedAt: now() } : i) })),
-      bulkSetStatus: (ids, status) => set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, canonStatus: status, updatedAt: now() } : i) })),
-      bulkAddTags: (ids, tags) => set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, tags: Array.from(new Set([...i.tags, ...tags])), updatedAt: now() } : i) })),
+      updateItem: (id, patch, mode = "overwrite") => {
+        let edited: BaseItem | undefined;
+        set((s) => ({
+          items: s.items.map((it) => {
+            if (it.id !== id) return it;
+            const versions = mode === "version"
+              ? [...it.versions, { version: it.versions.length + 1, snapshot: { ...it }, createdAt: now() }]
+              : it.versions;
+            edited = { ...it, ...patch, updatedAt: now(), versions };
+            return edited;
+          }),
+        }));
+        if (edited) audit(mode === "version" ? "save_version" : "update", { entityType: edited.type, entityId: edited.id, entityName: edited.name });
+      },
+      duplicateItem: (id) => {
+        let copy: BaseItem | null = null;
+        set((s) => {
+          const orig = s.items.find((i) => i.id === id);
+          if (!orig) return {};
+          copy = { ...orig, id: uid(), name: orig.name + " (Copy)", createdAt: now(), updatedAt: now(), versions: [] };
+          return { items: [...s.items, copy] };
+        });
+        if (copy) audit("duplicate", { entityType: copy.type, entityId: copy.id, entityName: copy.name });
+      },
+      deleteItems: (ids) => {
+        set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, deleted: true, updatedAt: now() } : i) }));
+        audit("soft_delete", { details: { ids } });
+      },
+      restoreItems: (ids) => {
+        set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, deleted: false, updatedAt: now() } : i) }));
+        audit("restore", { details: { ids } });
+      },
+      hardDeleteItems: (ids) => {
+        set((s) => ({ items: s.items.filter((i) => !ids.includes(i.id)) }));
+        audit("hard_delete", { details: { ids } });
+      },
+      archiveItems: (ids, archived) => {
+        set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, archived, updatedAt: now() } : i) }));
+        audit(archived ? "archive" : "unarchive", { details: { ids } });
+      },
+      bulkSetStatus: (ids, status) => {
+        set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, canonStatus: status, updatedAt: now() } : i) }));
+        audit("bulk_status", { details: { ids, status } });
+      },
+      bulkAddTags: (ids, tags) => {
+        set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, tags: Array.from(new Set([...i.tags, ...tags])), updatedAt: now() } : i) }));
+        audit("bulk_tag", { details: { ids, tags } });
+      },
       approveSuggestion: (id) => {
         const sug = get().suggestions.find((s) => s.id === id);
         if (!sug) return;
@@ -424,8 +459,14 @@ export const useStore = create<State>()(
           description: sug.excerpt, sourceUploadIds: [sug.sourceUploadId],
         });
         set((s) => ({ suggestions: s.suggestions.map((x) => x.id === id ? { ...x, status: "approved" } : x) }));
+        audit("approve_suggestion", { entityType: sug.suggestedCategory, entityName: sug.suggestedTitle });
+        scheduleSummaryRefresh();
       },
-      rejectSuggestion: (id) => set((s) => ({ suggestions: s.suggestions.map((x) => x.id === id ? { ...x, status: "rejected" } : x) })),
+      rejectSuggestion: (id) => {
+        const sug = get().suggestions.find((s) => s.id === id);
+        set((s) => ({ suggestions: s.suggestions.map((x) => x.id === id ? { ...x, status: "rejected" } : x) }));
+        if (sug) audit("reject_suggestion", { entityType: sug.suggestedCategory, entityName: sug.suggestedTitle });
+      },
       runExtraction: (sourceId) => {
         const src = get().items.find((i) => i.id === sourceId) as any;
         if (!src) return 0;
@@ -438,6 +479,7 @@ export const useStore = create<State>()(
           confidence: s.confidence, reason: s.reason, status: "pending", createdAt: now(),
         }));
         set((s) => ({ suggestions: [...s.suggestions, ...newSugs] }));
+        audit("run_extraction", { entityType: "source", entityId: sourceId, entityName: src.name, details: { found: newSugs.length } });
         return newSugs.length;
       },
     }),
