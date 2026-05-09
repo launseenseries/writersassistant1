@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, Pathway, BaseItem } from "@/lib/store";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, GitBranch, RefreshCw, ArrowRight, Plus as PlusIcon, Lock, Unlock } from "lucide-react";
+import { Plus, GitBranch, RefreshCw, ArrowRight, Plus as PlusIcon, Lock, Unlock, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/pathways")({ component: Page });
@@ -72,7 +72,10 @@ function Page() {
           <h1 className="text-2xl font-semibold">Pathways</h1>
           <p className="text-sm text-muted-foreground">Connect story records into trails. Refresh to find new links across uploads.</p>
         </div>
-        <Button onClick={() => setCreating(true)} className="gradient-violet text-white border-0"><Plus className="w-4 h-4 mr-1" />New Pathway</Button>
+        <div className="flex gap-2">
+          <Link to="/pathways/prompt"><Button variant="outline"><Sparkles className="w-4 h-4 mr-1" />By prompt</Button></Link>
+          <Button onClick={() => setCreating(true)} className="gradient-violet text-white border-0"><Plus className="w-4 h-4 mr-1" />New Pathway</Button>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-3">
