@@ -478,7 +478,7 @@ export const useStore = create<State>()(
         return newSugs.length;
       },
     }),
-    { name: "writers-assistant-v1" }
+    { name: "writers-assistant-v2-oz" }
   )
 );
 
