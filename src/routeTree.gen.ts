@@ -36,6 +36,7 @@ import { Route as CanonRouteImport } from './routes/canon'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuditLogRouteImport } from './routes/audit-log'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PathwaysPromptRouteImport } from './routes/pathways.prompt'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 
 const WorldbuildingRoute = WorldbuildingRouteImport.update({
@@ -173,6 +174,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PathwaysPromptRoute = PathwaysPromptRouteImport.update({
+  id: '/prompt',
+  path: '/prompt',
+  getParentRoute: () => PathwaysRoute,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -198,7 +204,7 @@ export interface FileRoutesByFullPath {
   '/inbox': typeof InboxRoute
   '/locations': typeof LocationsRoute
   '/magic': typeof MagicRoute
-  '/pathways': typeof PathwaysRoute
+  '/pathways': typeof PathwaysRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/retcons': typeof RetconsRoute
   '/settings': typeof SettingsRoute
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/pathways/prompt': typeof PathwaysPromptRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -228,7 +235,7 @@ export interface FileRoutesByTo {
   '/inbox': typeof InboxRoute
   '/locations': typeof LocationsRoute
   '/magic': typeof MagicRoute
-  '/pathways': typeof PathwaysRoute
+  '/pathways': typeof PathwaysRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/retcons': typeof RetconsRoute
   '/settings': typeof SettingsRoute
@@ -238,6 +245,7 @@ export interface FileRoutesByTo {
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/pathways/prompt': typeof PathwaysPromptRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -259,7 +267,7 @@ export interface FileRoutesById {
   '/inbox': typeof InboxRoute
   '/locations': typeof LocationsRoute
   '/magic': typeof MagicRoute
-  '/pathways': typeof PathwaysRoute
+  '/pathways': typeof PathwaysRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/retcons': typeof RetconsRoute
   '/settings': typeof SettingsRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/uploads': typeof UploadsRoute
   '/worldbuilding': typeof WorldbuildingRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/pathways/prompt': typeof PathwaysPromptRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -301,6 +310,7 @@ export interface FileRouteTypes {
     | '/uploads'
     | '/worldbuilding'
     | '/invite/$token'
+    | '/pathways/prompt'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -331,6 +341,7 @@ export interface FileRouteTypes {
     | '/uploads'
     | '/worldbuilding'
     | '/invite/$token'
+    | '/pathways/prompt'
   id:
     | '__root__'
     | '/'
@@ -361,6 +372,7 @@ export interface FileRouteTypes {
     | '/uploads'
     | '/worldbuilding'
     | '/invite/$token'
+    | '/pathways/prompt'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -382,7 +394,7 @@ export interface RootRouteChildren {
   InboxRoute: typeof InboxRoute
   LocationsRoute: typeof LocationsRoute
   MagicRoute: typeof MagicRoute
-  PathwaysRoute: typeof PathwaysRoute
+  PathwaysRoute: typeof PathwaysRouteWithChildren
   ProjectsRoute: typeof ProjectsRoute
   RetconsRoute: typeof RetconsRoute
   SettingsRoute: typeof SettingsRoute
@@ -585,6 +597,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pathways/prompt': {
+      id: '/pathways/prompt'
+      path: '/prompt'
+      fullPath: '/pathways/prompt'
+      preLoaderRoute: typeof PathwaysPromptRouteImport
+      parentRoute: typeof PathwaysRoute
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -594,6 +613,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface PathwaysRouteChildren {
+  PathwaysPromptRoute: typeof PathwaysPromptRoute
+}
+
+const PathwaysRouteChildren: PathwaysRouteChildren = {
+  PathwaysPromptRoute: PathwaysPromptRoute,
+}
+
+const PathwaysRouteWithChildren = PathwaysRoute._addFileChildren(
+  PathwaysRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -614,7 +645,7 @@ const rootRouteChildren: RootRouteChildren = {
   InboxRoute: InboxRoute,
   LocationsRoute: LocationsRoute,
   MagicRoute: MagicRoute,
-  PathwaysRoute: PathwaysRoute,
+  PathwaysRoute: PathwaysRouteWithChildren,
   ProjectsRoute: ProjectsRoute,
   RetconsRoute: RetconsRoute,
   SettingsRoute: SettingsRoute,
