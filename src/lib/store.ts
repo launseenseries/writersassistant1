@@ -418,14 +418,11 @@ export const useStore = create<State>()(
         if (edited) audit(mode === "version" ? "save_version" : "update", { entityType: edited.type, entityId: edited.id, entityName: edited.name });
       },
       duplicateItem: (id) => {
-        let copy: BaseItem | null = null;
-        set((s) => {
-          const orig = s.items.find((i) => i.id === id);
-          if (!orig) return {};
-          copy = { ...orig, id: uid(), name: orig.name + " (Copy)", createdAt: now(), updatedAt: now(), versions: [] };
-          return { items: [...s.items, copy] };
-        });
-        if (copy) audit("duplicate", { entityType: copy.type, entityId: copy.id, entityName: copy.name });
+        const orig = get().items.find((i) => i.id === id);
+        if (!orig) return;
+        const copy: BaseItem = { ...orig, id: uid(), name: orig.name + " (Copy)", createdAt: now(), updatedAt: now(), versions: [] };
+        set((s) => ({ items: [...s.items, copy] }));
+        audit("duplicate", { entityType: copy.type, entityId: copy.id, entityName: copy.name });
       },
       deleteItems: (ids) => {
         set((s) => ({ items: s.items.map((i) => ids.includes(i.id) ? { ...i, deleted: true, updatedAt: now() } : i) }));
