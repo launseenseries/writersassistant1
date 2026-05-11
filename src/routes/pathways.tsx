@@ -462,7 +462,7 @@ function CardGrid({
   onContinue: (pw: BaseItem) => void;
   onDelete: (id: string) => void;
   updateItem: (id: string, patch: Partial<BaseItem>) => void;
-  addItem: ReturnType<typeof useStore>["addItem"];
+  addItem: (i: any) => any;
   variant?: "pinned" | "canon" | "alternate" | "rejected";
 }) {
   if (cards.length === 0) {
@@ -486,7 +486,7 @@ function PathwayCard({
   onContinue: (pw: BaseItem) => void;
   onDelete: (id: string) => void;
   updateItem: (id: string, patch: Partial<BaseItem>) => void;
-  addItem: ReturnType<typeof useStore>["addItem"];
+  addItem: (i: any) => any;
   variant?: "pinned" | "canon" | "alternate" | "rejected";
 }) {
   const [editing, setEditing] = useState(false);
