@@ -39,7 +39,8 @@ function Page() {
     setBusy(true);
     try {
       const payload = list.map((s: any) => ({ name: s.name, text: (s.data?.rawText || s.description || "").slice(0, 4000) }));
-      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources: payload, mode: "advice" } });
+      const { useSettings } = await import("@/lib/settings");
+      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources: payload, mode: "advice", familyFriendly: useSettings.getState().familyFriendly } });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setAdvice(data.advice || "(no advice)");
