@@ -26,6 +26,7 @@ serve(async (req) => {
       pathwayType = "Plot Arc Pathway",
       count = 4,
       mode = "fresh", // 'fresh' | 'continue'
+      familyFriendly = false,
     } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
