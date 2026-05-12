@@ -17,22 +17,20 @@ function AcceptInvite() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("project_invites").select("*").eq("token", token).maybeSingle().then(({ data }) => {
-      setInvite(data); setLoading(false);
+    (supabase as any).rpc("get_invite_by_token", { _token: token }).then(({ data }: any) => {
+      const row = Array.isArray(data) ? data[0] : data;
+      setInvite(row && !row.expired ? row : null);
+      setLoading(false);
     });
   }, [token]);
 
   const accept = async () => {
     if (!user) { nav({ to: "/auth" }); return; }
-    const { error } = await supabase.from("project_collaborators").insert({
-      project_id: invite.project_id,
-      project_title: invite.project_title,
-      user_id: user.id,
-      role: invite.role,
-    });
+    const { data, error } = await (supabase as any).rpc("accept_invite", { _token: token });
     if (error) { toast.error(error.message); return; }
-    await logAudit("collaborator.joined", { entityType: "project", entityId: invite.project_id, entityName: invite.project_title, details: { role: invite.role } });
-    toast.success(`Joined as ${invite.role}`);
+    const row = Array.isArray(data) ? data[0] : data;
+    await logAudit("collaborator.joined", { entityType: "project", entityId: row?.project_id, entityName: row?.project_title, details: { role: row?.role } });
+    toast.success(`Joined as ${row?.role}`);
     nav({ to: "/collaborators" });
   };
 
