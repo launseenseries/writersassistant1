@@ -1,4 +1,10 @@
 project_id = "oiyxntgyawrshkoofndp"
 
 [functions.writing-advice]
-verify_jwt = false
+verify_jwt = true
+
+[functions.pathway-cards]
+verify_jwt = true
+
+[functions.pathway-from-prompt]
+verify_jwt = true
