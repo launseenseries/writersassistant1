@@ -78,13 +78,8 @@ function ProjectSwitcher() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const { theme } = useTheme();
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    document.documentElement.classList.toggle("light", theme === "light");
-    document.body.classList.toggle("dark", theme === "dark");
-    document.body.classList.toggle("light", theme === "light");
-  }, [theme]);
+  const { theme, setTheme } = useTheme();
+  useEffect(() => { setTheme(theme); }, [theme, setTheme]);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

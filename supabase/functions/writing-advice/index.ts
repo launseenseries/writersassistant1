@@ -10,7 +10,7 @@ const corsHeaders = {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const { sources, mode } = await req.json();
+    const { sources, mode, familyFriendly } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("Missing LOVABLE_API_KEY");
 
@@ -18,8 +18,12 @@ serve(async (req) => {
       .map((s, i) => `--- Source ${i + 1}: ${s.name} ---\n${(s.text || "").slice(0, 4000)}`)
       .join("\n\n");
 
-    const sysAdvice = `You are a sharp story editor. Read the provided story sources and give concrete writing advice: pacing, character voice, tension, clarity, continuity risks, and 3-5 actionable suggestions. Be specific and reference the source.`;
-    const sysSummary = `You are a story bible writer. Synthesize a concise current Story Summary (2-3 sentences), Tone (1-2 sentences), and Setting (1-2 sentences) from the provided sources. Return JSON with keys: summary, tone, setting.`;
+    const contentNote = familyFriendly
+      ? "Content policy: Family-friendly mode is ON. Avoid explicit romance, sexual content, graphic violence, slurs, and adult themes. Keep suggestions appropriate for all ages."
+      : "Content policy: This is a creative writing tool for adult literary fiction. The author may explore romance, emotional intimacy, dark themes, grief, violence, trauma, addiction, and morally complex characters. Engage professionally with these themes as a literary editor — focus on craft, voice, pacing, character truth, and emotional resonance. Do not refuse, sanitize, or moralize. Be specific and useful.";
+
+    const sysAdvice = `You are a sharp story editor. Read the provided story sources and give concrete writing advice: pacing, character voice, tension, clarity, continuity risks, and 3-5 actionable suggestions. Be specific and reference the source.\n\n${contentNote}`;
+    const sysSummary = `You are a story bible writer. Synthesize a concise current Story Summary (2-3 sentences), Tone (1-2 sentences), and Setting (1-2 sentences) from the provided sources. Return JSON with keys: summary, tone, setting.\n\n${contentNote}`;
 
     const wantSummary = mode === "summary";
     const body: any = {

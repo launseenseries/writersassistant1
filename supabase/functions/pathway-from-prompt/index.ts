@@ -10,7 +10,7 @@ const corsHeaders = {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const { prompt, canon, pathwayType } = await req.json();
+    const { prompt, canon, pathwayType, familyFriendly } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("Missing LOVABLE_API_KEY");
 
@@ -19,7 +19,11 @@ serve(async (req) => {
       .map((c) => `- ${c.name} (${c.type})`)
       .join("\n");
 
-    const sys = `You are a story-pathway designer. Given a writer's prompt and a list of existing canon items (characters, locations, factions, timeline events, magic, etc.), produce an ordered pathway. Prefer reusing existing canon names exactly when relevant. Invent new nodes only when needed; mark them with isNew=true. Return 3-8 nodes plus optional connections describing relationships between them.`;
+    const contentNote = familyFriendly
+      ? "Content policy: Family-friendly mode is ON. Keep all suggestions appropriate for general audiences."
+      : "Content policy: Adult literary fiction is supported. Romance, emotional intimacy, dark themes, violence, and morally complex choices are valid story material — engage as a professional collaborator focused on craft.";
+
+    const sys = `You are a story-pathway designer. Given a writer's prompt and a list of existing canon items (characters, locations, factions, timeline events, magic, etc.), produce an ordered pathway. Prefer reusing existing canon names exactly when relevant. Invent new nodes only when needed; mark them with isNew=true. Return 3-8 nodes plus optional connections describing relationships between them.\n\n${contentNote}`;
 
     const body: any = {
       model: "google/gemini-3-flash-preview",

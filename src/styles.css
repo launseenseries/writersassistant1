@@ -47,51 +47,55 @@
   --color-chart-5: var(--chart-5);
 }
 
-:root, .dark {
+/* ============ THEME 1: Cinematic Arcane (default, dark) ============ */
+:root, .dark, .theme-arcane {
   --radius: 0.625rem;
-  --background: oklch(0.17 0.025 280);
+  --background: oklch(0.15 0.03 275);
   --foreground: oklch(0.97 0.005 280);
-  --panel: oklch(0.22 0.03 280);
-  --card: oklch(0.22 0.03 280);
+  --panel: oklch(0.21 0.04 280);
+  --card: oklch(0.21 0.04 280);
   --card-foreground: oklch(0.97 0.005 280);
-  --popover: oklch(0.22 0.03 280);
+  --popover: oklch(0.20 0.04 280);
   --popover-foreground: oklch(0.97 0.005 280);
-  --primary: oklch(0.65 0.22 295);
+  --primary: oklch(0.68 0.24 295);
   --primary-foreground: oklch(0.99 0.005 280);
-  --secondary: oklch(0.28 0.04 280);
+  --secondary: oklch(0.27 0.05 280);
   --secondary-foreground: oklch(0.97 0.005 280);
-  --muted: oklch(0.26 0.03 280);
-  --muted-foreground: oklch(0.72 0.025 280);
-  --accent: oklch(0.32 0.08 280);
+  --muted: oklch(0.25 0.04 280);
+  --muted-foreground: oklch(0.74 0.03 280);
+  --accent: oklch(0.34 0.10 280);
   --accent-foreground: oklch(0.97 0.005 280);
   --destructive: oklch(0.62 0.24 27);
   --destructive-foreground: oklch(0.99 0.005 280);
-  --border: oklch(0.3 0.04 280);
-  --input: oklch(0.3 0.04 280);
-  --ring: oklch(0.65 0.22 295);
-  --electric: oklch(0.7 0.18 240);
+  --border: oklch(0.32 0.05 280);
+  --input: oklch(0.30 0.04 280);
+  --ring: oklch(0.68 0.24 295);
+  --electric: oklch(0.72 0.20 240);
   --electric-foreground: oklch(0.99 0.005 280);
-  --violet-glow: oklch(0.7 0.25 295);
-  --chart-1: oklch(0.65 0.22 295);
-  --chart-2: oklch(0.7 0.18 240);
-  --chart-3: oklch(0.75 0.15 200);
-  --chart-4: oklch(0.7 0.2 320);
-  --chart-5: oklch(0.65 0.18 260);
-  --sidebar: oklch(0.15 0.025 280);
+  --violet-glow: oklch(0.72 0.26 295);
+  --chart-1: oklch(0.68 0.24 295);
+  --chart-2: oklch(0.72 0.20 240);
+  --chart-3: oklch(0.78 0.16 200);
+  --chart-4: oklch(0.72 0.22 320);
+  --chart-5: oklch(0.66 0.20 260);
+  --sidebar: oklch(0.13 0.03 280);
   --sidebar-foreground: oklch(0.92 0.01 280);
-  --sidebar-primary: oklch(0.65 0.22 295);
+  --sidebar-primary: oklch(0.68 0.24 295);
   --sidebar-primary-foreground: oklch(0.99 0.005 280);
-  --sidebar-accent: oklch(0.25 0.04 280);
+  --sidebar-accent: oklch(0.24 0.04 280);
   --sidebar-accent-foreground: oklch(0.97 0.005 280);
-  --sidebar-border: oklch(0.28 0.04 280);
-  --sidebar-ring: oklch(0.65 0.22 295);
+  --sidebar-border: oklch(0.27 0.04 280);
+  --sidebar-ring: oklch(0.68 0.24 295);
+  --grad-primary: linear-gradient(135deg, var(--violet-glow), var(--electric));
+  --shadow-glow: 0 0 30px -8px color-mix(in oklab, var(--violet-glow) 60%, transparent);
 }
 
-.light {
+/* ============ THEME 2: Story Garden (light) ============ */
+.theme-garden, .light {
   --background: oklch(0.99 0.01 150);
   --foreground: oklch(0.22 0.04 150);
   --panel: oklch(0.97 0.025 150);
-  --card: oklch(0.98 0.02 150);
+  --card: oklch(0.985 0.018 150);
   --card-foreground: oklch(0.22 0.04 150);
   --popover: oklch(0.99 0.01 150);
   --popover-foreground: oklch(0.22 0.04 150);
@@ -111,7 +115,7 @@
   --electric: oklch(0.65 0.14 175);
   --electric-foreground: oklch(0.15 0.04 150);
   --violet-glow: oklch(0.72 0.16 150);
-  --sidebar: oklch(0.95 0.04 150);
+  --sidebar: oklch(0.96 0.03 150);
   --sidebar-foreground: oklch(0.25 0.05 150);
   --sidebar-primary: oklch(0.62 0.16 150);
   --sidebar-primary-foreground: oklch(0.99 0.005 150);
@@ -119,22 +123,105 @@
   --sidebar-accent-foreground: oklch(0.2 0.05 150);
   --sidebar-border: oklch(0.84 0.05 150);
   --sidebar-ring: oklch(0.62 0.16 150);
+  --grad-primary: linear-gradient(135deg, oklch(0.78 0.12 150), oklch(0.85 0.10 175));
+  --shadow-glow: 0 8px 24px -12px color-mix(in oklab, oklch(0.62 0.16 150) 35%, transparent);
+}
+
+/* ============ THEME 3: Magical Dream (kawaii pink) ============ */
+.theme-kawaii {
+  --background: oklch(0.985 0.015 350);
+  --foreground: oklch(0.30 0.08 340);
+  --panel: oklch(0.97 0.03 345);
+  --card: oklch(0.98 0.025 345);
+  --card-foreground: oklch(0.30 0.08 340);
+  --popover: oklch(0.99 0.015 345);
+  --popover-foreground: oklch(0.30 0.08 340);
+  --primary: oklch(0.74 0.18 345);
+  --primary-foreground: oklch(0.99 0.005 345);
+  --secondary: oklch(0.94 0.05 320);
+  --secondary-foreground: oklch(0.32 0.08 340);
+  --muted: oklch(0.95 0.03 345);
+  --muted-foreground: oklch(0.50 0.07 340);
+  --accent: oklch(0.86 0.10 320);
+  --accent-foreground: oklch(0.28 0.08 340);
+  --destructive: oklch(0.62 0.24 27);
+  --destructive-foreground: oklch(0.99 0.005 345);
+  --border: oklch(0.88 0.06 345);
+  --input: oklch(0.93 0.04 345);
+  --ring: oklch(0.74 0.18 345);
+  --electric: oklch(0.78 0.14 310);
+  --electric-foreground: oklch(0.20 0.08 340);
+  --violet-glow: oklch(0.80 0.16 320);
+  --sidebar: oklch(0.96 0.04 340);
+  --sidebar-foreground: oklch(0.32 0.08 340);
+  --sidebar-primary: oklch(0.74 0.18 345);
+  --sidebar-primary-foreground: oklch(0.99 0.005 345);
+  --sidebar-accent: oklch(0.90 0.07 330);
+  --sidebar-accent-foreground: oklch(0.28 0.08 340);
+  --sidebar-border: oklch(0.88 0.05 340);
+  --sidebar-ring: oklch(0.74 0.18 345);
+  --grad-primary: linear-gradient(135deg, oklch(0.82 0.16 350), oklch(0.84 0.14 310));
+  --shadow-glow: 0 0 28px -6px color-mix(in oklab, oklch(0.78 0.18 345) 55%, transparent);
 }
 
 @layer base {
   * { border-color: var(--color-border); }
   html, body { background-color: var(--color-background); color: var(--color-foreground); }
   body { font-feature-settings: "ss01", "cv11"; }
+
+  .theme-kawaii body {
+    background-image:
+      radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--violet-glow) 25%, transparent), transparent 60%),
+      radial-gradient(900px 500px at 110% 20%, color-mix(in oklab, var(--electric) 22%, transparent), transparent 60%);
+  }
+  .theme-arcane body {
+    background-image:
+      radial-gradient(900px 500px at 0% -10%, color-mix(in oklab, var(--violet-glow) 18%, transparent), transparent 60%),
+      radial-gradient(800px 460px at 110% 0%, color-mix(in oklab, var(--electric) 14%, transparent), transparent 60%);
+  }
+  .theme-garden body {
+    background-image:
+      radial-gradient(700px 400px at 100% -10%, color-mix(in oklab, oklch(0.85 0.12 150) 25%, transparent), transparent 60%);
+  }
 }
 
 @layer utilities {
-  .gradient-violet { background-image: linear-gradient(135deg, var(--violet-glow), var(--electric)); }
+  .gradient-violet { background-image: var(--grad-primary); }
   .text-gradient {
-    background-image: linear-gradient(135deg, var(--violet-glow), var(--electric));
+    background-image: var(--grad-primary);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
-  .glow-violet { box-shadow: 0 0 30px -8px color-mix(in oklab, var(--violet-glow) 60%, transparent); }
+  .glow-violet { box-shadow: var(--shadow-glow); }
   .panel { background-color: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+
+  /* Theme animations */
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 14px -6px color-mix(in oklab, var(--violet-glow) 55%, transparent); }
+    50%      { box-shadow: 0 0 28px -4px color-mix(in oklab, var(--violet-glow) 80%, transparent); }
+  }
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+  @keyframes sparkle-twinkle {
+    0%, 100% { opacity: 0.4; transform: scale(0.9) rotate(0deg); }
+    50%      { opacity: 1;   transform: scale(1.1) rotate(15deg); }
+  }
+  @keyframes leaf-drift {
+    0%   { transform: translate(0,0) rotate(0); opacity: 0; }
+    20%  { opacity: 0.6; }
+    100% { transform: translate(40px, 80px) rotate(40deg); opacity: 0; }
+  }
+
+  .pulse-glow { animation: glow-pulse 3s ease-in-out infinite; }
+  .float-card { animation: float-soft 4s ease-in-out infinite; }
+  .sparkle { animation: sparkle-twinkle 2.4s ease-in-out infinite; }
+
+  .theme-kawaii .pathway-card,
+  .theme-kawaii .panel,
+  .theme-kawaii [data-slot="card"] { border-radius: 18px; }
+  .theme-arcane [data-slot="card"]:hover { box-shadow: 0 0 26px -10px color-mix(in oklab, var(--violet-glow) 60%, transparent); }
+  .theme-garden [data-slot="card"] { box-shadow: 0 1px 0 color-mix(in oklab, var(--primary) 8%, transparent), 0 6px 20px -16px color-mix(in oklab, var(--primary) 25%, transparent); }
 }

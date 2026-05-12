@@ -74,8 +74,8 @@ export function Sidebar() {
           <div className="text-sm font-semibold text-sidebar-foreground">Writer's Assistant</div>
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Canon Studio</div>
         </div>
-        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="text-muted-foreground hover:text-foreground" title="Toggle theme">
-          {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        <button onClick={() => useTheme.getState().cycle()} className="text-muted-foreground hover:text-foreground" title={`Theme: ${theme} — click to cycle`}>
+          {theme === "arcane" ? <Moon className="w-4 h-4" /> : theme === "garden" ? <Sun className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
         </button>
       </div>
 
