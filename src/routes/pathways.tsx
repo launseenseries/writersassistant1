@@ -184,6 +184,8 @@ function Page() {
         .slice(0, 12)
         .map((p) => ({ title: p.name, summary: get(p).summary || p.description || "", state: STATE_LABEL[get(p).cardState] }));
 
+      const { useSettings } = await import("@/lib/settings");
+      const familyFriendly = useSettings.getState().familyFriendly;
       const { data, error } = await supabase.functions.invoke("pathway-cards", {
         body: {
           mode: continueFrom ? "continue" : "fresh",
@@ -197,6 +199,7 @@ function Page() {
           filters: filters ? { notes: filters } : {},
           endGoal, tone, pacing, relationships,
           pathwayType, count,
+          familyFriendly,
         },
       });
       if (error) throw error;
