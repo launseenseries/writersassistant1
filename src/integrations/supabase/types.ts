@@ -142,6 +142,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_invite: {
+        Args: { _token: string }
+        Returns: {
+          project_id: string
+          project_title: string
+          role: Database["public"]["Enums"]["collab_role"]
+        }[]
+      }
+      get_invite_by_token: {
+        Args: { _token: string }
+        Returns: {
+          expired: boolean
+          project_id: string
+          project_title: string
+          role: Database["public"]["Enums"]["collab_role"]
+        }[]
+      }
       is_project_member: {
         Args: { _project_id: string; _user_id: string }
         Returns: boolean
