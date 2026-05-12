@@ -39,7 +39,7 @@ const KEYWORDS: Array<[RegExp, keyof typeof Lucide]> = [
   [/holiday|festival|ceremony|ritual/i, "PartyPopper"],
   [/era|age|epoch|period/i, "Hourglass"],
   [/rumor|gossip|whisper/i, "MessageCircle"],
-  [/crime|thief|guild|underworld/i, "Mask"],
+  [/crime|thief|guild|underworld/i, "VenetianMask"],
   [/love|romance|lover|courtship/i, "Heart"],
   [/death|grave|tomb|funeral/i, "Skull"],
   [/birth|child|heir|lineage/i, "Baby"],
