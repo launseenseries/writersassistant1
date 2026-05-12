@@ -39,7 +39,11 @@ serve(async (req) => {
     const canonList = canon.slice(0, 120).map((c) => `- ${c.name} (${c.type})`).join("\n");
     const priorList = priorCards.slice(0, 12).map((c) => `- [${c.state}] ${c.title}: ${c.summary}`).join("\n");
 
-    const sys = `You are a writer's pathway designer. You create CINEMATIC, CARD-BASED story continuation ideas (NOT graphs, NOT workflows). Each card is a vivid mini-pitch a novelist could expand into a chapter or arc. Cards must respect the writer's existing canon and the story order of their uploads. Stay grounded in their characters, locations, factions, and tone. ${mode === "continue" ? "These cards continue DIRECTLY from the selected prior pathway — do not pivot to unrelated ideas." : ""}`;
+    const contentNote = familyFriendly
+      ? "Content policy: Family-friendly mode is ON. Keep all suggestions appropriate for general audiences — no explicit romance, sexual content, graphic violence, or adult themes."
+      : "Content policy: This is a creative writing tool for adult literary fiction. Pathways may include romance, emotional intimacy, dark themes, grief, violence, trauma, and morally complex choices. Engage as a professional literary collaborator — focus on craft, voice, character truth, and emotional resonance. Do not refuse, sanitize, or moralize. Be specific.";
+
+    const sys = `You are a writer's pathway designer. You create CINEMATIC, CARD-BASED story continuation ideas (NOT graphs, NOT workflows). Each card is a vivid mini-pitch a novelist could expand into a chapter or arc. Cards must respect the writer's existing canon and the story order of their uploads. Stay grounded in their characters, locations, factions, and tone. ${mode === "continue" ? "These cards continue DIRECTLY from the selected prior pathway — do not pivot to unrelated ideas." : ""}\n\n${contentNote}`;
 
     const userMsg = `
 Pathway type: ${pathwayType}
