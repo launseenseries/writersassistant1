@@ -45,8 +45,9 @@ function PromptPage() {
     setBusy(true);
     try {
       const canonPayload = canon.map((c) => ({ name: c.name, type: c.type }));
+      const { useSettings } = await import("@/lib/settings");
       const { data, error } = await supabase.functions.invoke("pathway-from-prompt", {
-        body: { prompt, pathwayType, canon: canonPayload },
+        body: { prompt, pathwayType, canon: canonPayload, familyFriendly: useSettings.getState().familyFriendly },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
