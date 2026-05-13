@@ -126,6 +126,26 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
                 );
               })}
             </ul>
+            {g.label === "Story Canon" && cats.length > 0 && (
+              <ul className="space-y-0.5 mt-0.5 pl-1 border-l border-sidebar-border ml-2">
+                {cats.map((c) => {
+                  const Icon = pickCategoryIcon(c.name);
+                  return (
+                    <li key={c.id}>
+                      <Link
+                        to="/canon"
+                        onClick={onNavigate}
+                        className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+                        title={`Custom category: ${c.name}`}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+                        {c.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         ))}
       </nav>
