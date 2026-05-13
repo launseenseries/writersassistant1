@@ -9,6 +9,9 @@ import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useCategories } from "@/lib/categories";
+import { useStore } from "@/lib/store";
+import { pickCategoryIcon } from "@/lib/category-icons";
 
 const groups: { label: string; items: { to: string; label: string; icon: any }[] }[] = [
   {
