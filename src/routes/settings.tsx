@@ -13,7 +13,7 @@ const THEME_ICON: Record<string, any> = { arcane: Moon, garden: Sun, kawaii: Spa
 export const Route = createFileRoute("/settings")({
   component: () => {
     const { theme, setTheme } = useTheme();
-    const { familyFriendly, setFamilyFriendly, reduceMotion, setReduceMotion } = useSettings();
+    const { familyFriendly, setFamilyFriendly, reduceMotion, setReduceMotion, dynamicSections, setDynamicSections } = useSettings();
 
     return (
       <div className="space-y-4 max-w-3xl">
