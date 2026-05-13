@@ -22,6 +22,8 @@ function Page() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [advice, setAdvice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [promptOpen, setPromptOpen] = useState<null | "all" | "selected">(null);
+  const [userPrompt, setUserPrompt] = useState("");
 
   const toggle = (id: string) => { const n = new Set(selected); n.has(id) ? n.delete(id) : n.add(id); setSelected(n); };
 
@@ -35,18 +37,19 @@ function Page() {
     toast.message("Order updated.");
   };
 
-  const getAdvice = async (scope: "all" | "selected") => {
+  const getAdvice = async (scope: "all" | "selected", prompt: string) => {
     const list = scope === "all" ? sources : sources.filter((s) => selected.has(s.id));
     if (list.length === 0) { toast.error("Nothing to analyze"); return; }
     setBusy(true);
     try {
       const payload = list.map((s: any) => ({ name: s.name, text: (s.data?.rawText || s.description || "").slice(0, 4000) }));
       const { useSettings } = await import("@/lib/settings");
-      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources: payload, mode: "advice", familyFriendly: useSettings.getState().familyFriendly } });
+      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources: payload, mode: "advice", familyFriendly: useSettings.getState().familyFriendly, userPrompt: prompt || undefined } });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setAdvice(data.advice || "(no advice)");
-      logAudit("ai.advice", { entityType: "source", details: { count: list.length, scope } });
+      logAudit("ai.advice", { entityType: "source", details: { count: list.length, scope, hasPrompt: !!prompt } });
+      setPromptOpen(null); setUserPrompt("");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
   };
 
