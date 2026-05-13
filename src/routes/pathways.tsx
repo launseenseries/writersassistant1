@@ -82,6 +82,7 @@ interface CardData {
 
 function Page() {
   const { items, currentProjectId, addItem, updateItem, deleteItems } = useStore();
+  const project = useCurrentProject();
   const projectItems = items.filter((i) => i.projectId === currentProjectId && !i.deleted);
   const pathways = projectItems.filter((i) => i.type === "pathway");
   const sources = projectItems.filter((i) => i.type === "source") as SourceUpload[];
