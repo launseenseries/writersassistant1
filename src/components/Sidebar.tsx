@@ -59,13 +59,18 @@ const groups: { label: string; items: { to: string; label: string; icon: any }[]
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "desktop" | "mobile"; onNavigate?: () => void } = {}) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { theme, setTheme } = useTheme();
+  void setTheme;
   const { user, username } = useAuth();
 
+  const wrapperClass = variant === "mobile"
+    ? "w-full h-full bg-sidebar overflow-y-auto"
+    : "hidden lg:block w-60 shrink-0 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 overflow-y-auto";
+
   return (
-    <aside className="w-60 shrink-0 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 overflow-y-auto">
+    <aside className={wrapperClass}>
       <div className="p-4 flex items-center gap-2 border-b border-sidebar-border">
         <div className="w-8 h-8 rounded-md gradient-violet flex items-center justify-center glow-violet">
           <Feather className="w-4 h-4 text-white" />
@@ -86,7 +91,7 @@ export function Sidebar() {
             <button onClick={() => supabase.auth.signOut()} className="text-muted-foreground hover:text-destructive"><LogOut className="w-3 h-3" /></button>
           </div>
         ) : (
-          <Link to="/auth" className="flex items-center gap-1 text-muted-foreground hover:text-foreground"><LogIn className="w-3 h-3" />Sign in</Link>
+          <Link to="/auth" onClick={onNavigate} className="flex items-center gap-1 text-muted-foreground hover:text-foreground"><LogIn className="w-3 h-3" />Sign in</Link>
         )}
       </div>
 
@@ -102,6 +107,7 @@ export function Sidebar() {
                   <li key={it.to}>
                     <Link
                       to={it.to}
+                      onClick={onNavigate}
                       className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors ${
                         active
                           ? "bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-primary"
@@ -121,3 +127,6 @@ export function Sidebar() {
     </aside>
   );
 }
+
+void Button;
+
