@@ -60,10 +60,9 @@ function InboxPage() {
   };
 
   function runExtractionSafe(id: string): number {
-    // Inject rawText to top-level shape expected by store extractor
     const it = useStore.getState().items.find((x) => x.id === id) as any;
     if (it) it.rawText = it.data?.rawText || "";
-    return runExtraction(id);
+    return runExtraction(id, dynamicSections ? filter : undefined);
   }
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
