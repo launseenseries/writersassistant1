@@ -286,20 +286,98 @@ function Page() {
     Rejected: filtered("Rejected").length,
   };
 
+  const PRESETS: { id: string; label: string; tone: string; pacing: string }[] = [
+    { id: "surprise", label: "Surprise me", tone: "", pacing: "" },
+    { id: "cinematic", label: "Cinematic & vivid", tone: "cinematic, sensory, vivid imagery", pacing: "scene-driven" },
+    { id: "slowburn", label: "Slow burn", tone: "intimate, restrained, simmering tension", pacing: "slow burn" },
+    { id: "high-stakes", label: "High stakes", tone: "urgent, dangerous, propulsive", pacing: "escalating" },
+    { id: "tender", label: "Tender & emotional", tone: "tender, emotionally honest, character-deep", pacing: "reflective" },
+    { id: "dark", label: "Dark & gothic", tone: "dark, gothic, morally complex", pacing: "ominous" },
+    { id: "twisty", label: "Twisty cliffhanger", tone: "twisty, surprising, revelatory", pacing: "cliffhanger" },
+  ];
+
+  const sourceLabel =
+    genMode === "latest-upload" ? "From latest upload" :
+    genMode === "current-order" ? "All uploads in order" :
+    `Selected uploads (${selectedUploads.length})`;
+
+  const brainstorm = async () => {
+    const chosen = PRESETS.find((p) => p.id === preset) || PRESETS[0];
+    if (chosen.id === "surprise") {
+      setPathwayType(PATHWAY_TYPES[Math.floor(Math.random() * PATHWAY_TYPES.length)]);
+      setTone(""); setPacing("");
+    } else {
+      setTone(chosen.tone); setPacing(chosen.pacing);
+    }
+    setContinueFromId(null);
+    // Defer one tick so state lands before generate reads it
+    setTimeout(() => { void generate(); }, 0);
+  };
+
   return (
-    <div className="space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold flex items-center gap-2"><GitBranch className="w-5 h-5 text-primary" />Pathways</h1>
-          <p className="text-sm text-muted-foreground">Cinematic, card-based AI continuations grounded in your canon. Pin, confirm, and continue your story's evolution.</p>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/pathways/prompt"><Button variant="outline"><Wand2 className="w-4 h-4 mr-1" />By prompt</Button></Link>
-          <Button onClick={() => { setContinueFromId(null); setGenOpen(true); }} className="gradient-violet text-white border-0">
-            <Sparkles className="w-4 h-4 mr-1" />Generate Pathway Cards
-          </Button>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <div className="text-xs tracking-[0.25em] uppercase text-primary/80 font-medium">{project?.title || "Untitled Project"}</div>
+        <h1 className="font-serif text-5xl sm:text-6xl font-semibold leading-tight mt-2">Story Pathways</h1>
+        <p className="text-base text-muted-foreground mt-3 max-w-2xl">Brainstorm branches, pin favorites, compare directions, and continue saved pathways further.</p>
       </div>
+
+      <Card className="panel border-border/60 bg-card/60 backdrop-blur">
+        <CardContent className="p-5 sm:p-6 space-y-4">
+          <div className="flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-primary font-medium">
+            <Sparkles className="w-4 h-4" /> AI Pathways
+          </div>
+          <div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-semibold">Where could the story go next?</h2>
+            <p className="text-sm text-muted-foreground mt-2">Brainstorm branching directions. Compare side-by-side, pin favorites, or save beats as draft events.</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Select value={genMode} onValueChange={(v) => setGenMode(v as any)}>
+              <SelectTrigger className="w-auto min-w-[180px] rounded-full bg-background/80 border-border/70 h-10">
+                <SelectValue placeholder="Source">{sourceLabel}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="latest-upload">From latest upload</SelectItem>
+                <SelectItem value="current-order">All uploads in story order</SelectItem>
+                <SelectItem value="selected-uploads">Choose uploads…</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={preset} onValueChange={setPreset}>
+              <SelectTrigger className="w-auto min-w-[160px] rounded-full bg-background/80 border-border/70 h-10">
+                <SelectValue>
+                  <span className="inline-flex items-center gap-2"><Shuffle className="w-3.5 h-3.5" />{PRESETS.find((p) => p.id === preset)?.label}</span>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {PRESETS.map((p) => <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>)}
+              </SelectContent>
+            </Select>
+
+            <Button variant="outline" className="rounded-full h-10 bg-background/80" onClick={() => { setContinueFromId(null); setGenOpen(true); }}>
+              <Wand2 className="w-4 h-4 mr-1.5" />Steer
+            </Button>
+
+            <Button variant="outline" className="rounded-full h-10 bg-background/80" onClick={() => { setContinueFromId(null); setGenOpen(true); setTimeout(() => { const el = document.querySelector<HTMLTextAreaElement>('textarea[placeholder^="Desired ending"]'); el?.focus(); }, 50); }}>
+              <Target className="w-4 h-4 mr-1.5" />End goal
+            </Button>
+
+            <Button onClick={brainstorm} disabled={busy} className="rounded-full h-10 px-6 gradient-violet text-white border-0 shadow-[0_0_24px_-8px_hsl(var(--primary))]">
+              {busy ? <RefreshCw className="w-4 h-4 mr-1.5 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
+              {busy ? "Brainstorming…" : "Brainstorm"}
+            </Button>
+          </div>
+
+          <p className="text-xs text-muted-foreground">
+            Hit <span className="text-foreground font-medium">Brainstorm</span> to get {count} distinct directions, each with next beats, open questions, and continuity risks. Pin favorites and continue them later.
+          </p>
+
+          <div className="flex flex-wrap gap-2 pt-1 border-t border-border/40">
+            <Link to="/pathways/prompt"><Button variant="ghost" size="sm" className="text-muted-foreground"><Wand2 className="w-3.5 h-3.5 mr-1" />Pathways by prompt</Button></Link>
+          </div>
+        </CardContent>
+      </Card>
 
       <Input placeholder="Search pathway cards…" value={search} onChange={(e) => setSearch(e.target.value)} className="bg-background max-w-sm" />
 
