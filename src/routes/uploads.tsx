@@ -61,10 +61,26 @@ function Page() {
           <p className="text-sm text-muted-foreground">Original upload order is preserved. Reorder to set corrected story order.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" disabled={busy} onClick={() => getAdvice("selected")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (selected)</Button>
-          <Button className="gradient-violet text-white border-0" disabled={busy} onClick={() => getAdvice("all")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (all)</Button>
+          <Button variant="outline" disabled={busy} onClick={() => setPromptOpen("selected")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (selected)</Button>
+          <Button className="gradient-violet text-white border-0" disabled={busy} onClick={() => setPromptOpen("all")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (all)</Button>
         </div>
       </div>
+
+      <Dialog open={!!promptOpen} onOpenChange={(o) => !o && setPromptOpen(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>AI Writing Advice — {promptOpen === "all" ? "all sources" : "selected sources"}</DialogTitle></DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="ap" className="text-xs text-muted-foreground">Optional prompt — focus the editor's attention (e.g. "tighten pacing in act two", "check Dorothy's voice", "find continuity gaps").</Label>
+            <Textarea id="ap" rows={4} value={userPrompt} onChange={(e) => setUserPrompt(e.target.value)} placeholder="Leave blank for general craft notes." className="bg-background" />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPromptOpen(null)}>Cancel</Button>
+            <Button disabled={busy} className="gradient-violet text-white border-0" onClick={() => promptOpen && getAdvice(promptOpen, userPrompt)}>
+              <Sparkles className="w-4 h-4 mr-1" />{busy ? "Thinking…" : "Get advice"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="panel p-3 text-sm text-yellow-300/80">
         ⚠ Changing upload story order updates pathway source trails and story-order sorting. No records are deleted.
