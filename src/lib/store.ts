@@ -462,19 +462,30 @@ export const useStore = create<State>()(
         set((s) => ({ suggestions: s.suggestions.map((x) => x.id === id ? { ...x, status: "rejected" } : x) }));
         if (sug) audit("reject_suggestion", { entityType: sug.suggestedCategory, entityName: sug.suggestedTitle });
       },
-      runExtraction: (sourceId) => {
+      runExtraction: (sourceId, filter) => {
         const src = get().items.find((i) => i.id === sourceId) as any;
         if (!src) return 0;
         const rawText: string = src.rawText || src.data?.rawText || src.description || "";
         const existing = get().suggestions.filter((s) => s.sourceUploadId === sourceId).map((s) => s.suggestedTitle.toLowerCase());
-        const found = extractFromText(rawText).filter((s) => !existing.includes(s.name.toLowerCase()));
+        let found = extractFromText(rawText).filter((s) => !existing.includes(s.name.toLowerCase()));
+        if (filter && (filter.story || filter.world || filter.glossary)) {
+          const STORY = new Set(["timeline", "character"]);
+          const WORLD = new Set(["worldbuilding", "location", "faction", "family", "heritage", "faith", "magic"]);
+          found = found.filter((s) => {
+            if (filter.story && STORY.has(s.category)) return true;
+            if (filter.world && WORLD.has(s.category)) return true;
+            // glossary terms aren't produced by the extractor today; pass-through capitalized single-word names if requested
+            if (filter.glossary && s.category === "worldbuilding" && !s.name.includes(" ")) return true;
+            return false;
+          });
+        }
         const newSugs: ImportSuggestion[] = found.map((s) => ({
           id: uid(), projectId: src.projectId, sourceUploadId: sourceId,
           suggestedTitle: s.name, suggestedCategory: s.category, excerpt: s.excerpt,
           confidence: s.confidence, reason: s.reason, status: "pending", createdAt: now(),
         }));
         set((s) => ({ suggestions: [...s.suggestions, ...newSugs] }));
-        audit("run_extraction", { entityType: "source", entityId: sourceId, entityName: src.name, details: { found: newSugs.length } });
+        audit("run_extraction", { entityType: "source", entityId: sourceId, entityName: src.name, details: { found: newSugs.length, filter } });
         return newSugs.length;
       },
     }),
