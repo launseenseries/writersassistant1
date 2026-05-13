@@ -108,6 +108,22 @@ function InboxPage() {
             <Input placeholder="Location" value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} className="bg-background" />
             <Input placeholder="Tags (comma)" value={draft.tags} onChange={(e) => setDraft({ ...draft, tags: e.target.value })} className="bg-background" />
           </div>
+          {dynamicSections && (
+            <div className="panel p-3">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Extract as</div>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <Label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={filter.story} onCheckedChange={(v) => setFilter({ ...filter, story: !!v })} /> Story (characters, events)
+                </Label>
+                <Label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={filter.world} onCheckedChange={(v) => setFilter({ ...filter, world: !!v })} /> World notes (places, factions, magic)
+                </Label>
+                <Label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={filter.glossary} onCheckedChange={(v) => setFilter({ ...filter, glossary: !!v })} /> Glossary terms
+                </Label>
+              </div>
+            </div>
+          )}
           <div className="flex justify-end">
             <Button onClick={submit} className="gradient-violet text-white border-0">Add to Inbox & Extract</Button>
           </div>
