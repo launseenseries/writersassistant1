@@ -71,7 +71,7 @@ function ProjectSwitcher() {
   const active = projects.filter((p) => !p.deleted);
   return (
     <Select value={currentProjectId} onValueChange={setCurrentProject}>
-      <SelectTrigger className="w-[260px] bg-card"><SelectValue /></SelectTrigger>
+      <SelectTrigger className="w-[160px] sm:w-[260px] bg-card"><SelectValue /></SelectTrigger>
       <SelectContent>
         {active.map((p) => <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>)}
       </SelectContent>
