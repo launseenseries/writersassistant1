@@ -41,9 +41,12 @@ const NAV = [
 
 function Hub() {
   const { projects, currentProjectId, items, updateProject } = useStore();
+  const dynamicSections = useSettings((s) => s.dynamicSections);
   const project = projects.find((p) => p.id === currentProjectId);
   const projItems = items.filter((i) => i.projectId === currentProjectId && !i.deleted);
   const [busy, setBusy] = useState(false);
+  const [editingGenre, setEditingGenre] = useState(false);
+  const [genreDraft, setGenreDraft] = useState("");
 
   const groups = Array.from(new Set(NAV.map((n) => n.group)));
 
