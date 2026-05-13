@@ -82,6 +82,7 @@ function ProjectSwitcher() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { theme, setTheme } = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => { setTheme(theme); }, [theme, setTheme]);
   return (
     <QueryClientProvider client={queryClient}>
@@ -89,11 +90,30 @@ function RootComponent() {
         <div className="flex min-h-screen w-full bg-background text-foreground">
           <Sidebar />
           <div className="flex-1 min-w-0 flex flex-col">
-            <header className="h-14 border-b border-border flex items-center justify-between px-6 sticky top-0 bg-background/80 backdrop-blur z-20">
-              <div className="text-sm text-muted-foreground">Active project</div>
+            <header className="h-14 border-b border-border flex items-center justify-between gap-2 px-4 sm:px-6 sticky top-0 bg-background/80 backdrop-blur z-20">
+              <div className="flex items-center gap-2 min-w-0">
+                <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+                      <Menu className="w-5 h-5" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="left" className="p-0 w-[280px] bg-sidebar border-sidebar-border">
+                    <SheetTitle className="sr-only">Navigation</SheetTitle>
+                    <Sidebar variant="mobile" onNavigate={() => setMobileOpen(false)} />
+                  </SheetContent>
+                </Sheet>
+                <div className="lg:hidden flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-md gradient-violet flex items-center justify-center">
+                    <Feather className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <span className="text-sm font-semibold truncate">Writer's Assistant</span>
+                </div>
+                <div className="hidden lg:block text-sm text-muted-foreground">Active project</div>
+              </div>
               <ProjectSwitcher />
             </header>
-            <main className="flex-1 p-6 max-w-[1400px] w-full mx-auto">
+            <main className="flex-1 p-4 sm:p-6 max-w-[1400px] w-full mx-auto">
               <Outlet />
             </main>
           </div>
