@@ -124,7 +124,8 @@ function Page() {
 
   // Generator state
   const [genOpen, setGenOpen] = useState(false);
-  const [genMode, setGenMode] = useState<"current-order" | "selected-uploads">("current-order");
+  const [genMode, setGenMode] = useState<"current-order" | "selected-uploads" | "latest-upload">("latest-upload");
+  const [preset, setPreset] = useState<string>("surprise");
   const [pathwayType, setPathwayType] = useState("Plot Arc Pathway");
   const [count, setCount] = useState(4);
   const [endGoal, setEndGoal] = useState("");
