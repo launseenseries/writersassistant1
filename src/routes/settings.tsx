@@ -70,6 +70,17 @@ export const Route = createFileRoute("/settings")({
               </div>
               <Switch id="rm" checked={reduceMotion} onCheckedChange={setReduceMotion} />
             </div>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <Label htmlFor="ds" className="font-medium">Dynamic sections</Label>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  When ON, dynamic UI shows up: editable genre on the Project Hub, the
+                  extraction-as filter (Story / World notes / Glossary terms) in the Inbox,
+                  and other adaptive panels. Turn OFF for a fixed, minimal layout.
+                </p>
+              </div>
+              <Switch id="ds" checked={dynamicSections} onCheckedChange={setDynamicSections} />
+            </div>
           </CardContent>
         </Card>
 
