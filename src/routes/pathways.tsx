@@ -15,7 +15,7 @@ import {
 import {
   Sparkles, Pin, PinOff, Check, X as XIcon, Bookmark, Archive, RefreshCw,
   ArrowUp, ArrowDown, Trash2, Wand2, GitBranch, Crown, Layers,
-  PlayCircle, Pencil, ChevronRight, History,
+  PlayCircle, Pencil, ChevronRight, History, Target, Shuffle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
