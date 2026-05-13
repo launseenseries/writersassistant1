@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, SourceUpload } from "@/lib/store";
+import { useSettings } from "@/lib/settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, FileText } from "lucide-react";
 
@@ -15,7 +18,9 @@ const SOURCE_TYPES = ["Chapter", "Scene", "Notes", "Character bio", "Lore note",
 
 function InboxPage() {
   const { items, currentProjectId, addItem, runExtraction } = useStore();
+  const dynamicSections = useSettings((s) => s.dynamicSections);
   const sources = items.filter((i) => i.projectId === currentProjectId && i.type === "source" && !i.deleted) as SourceUpload[];
+  const [filter, setFilter] = useState({ story: true, world: true, glossary: true });
   const [draft, setDraft] = useState({
     title: "", sourceType: "Chapter", rawText: "", chapter: "", scene: "",
     storyDate: "", pov: "", location: "", tags: "",
@@ -55,10 +60,9 @@ function InboxPage() {
   };
 
   function runExtractionSafe(id: string): number {
-    // Inject rawText to top-level shape expected by store extractor
     const it = useStore.getState().items.find((x) => x.id === id) as any;
     if (it) it.rawText = it.data?.rawText || "";
-    return runExtraction(id);
+    return runExtraction(id, dynamicSections ? filter : undefined);
   }
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +108,22 @@ function InboxPage() {
             <Input placeholder="Location" value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} className="bg-background" />
             <Input placeholder="Tags (comma)" value={draft.tags} onChange={(e) => setDraft({ ...draft, tags: e.target.value })} className="bg-background" />
           </div>
+          {dynamicSections && (
+            <div className="panel p-3">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Extract as</div>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <Label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={filter.story} onCheckedChange={(v) => setFilter({ ...filter, story: !!v })} /> Story (characters, events)
+                </Label>
+                <Label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={filter.world} onCheckedChange={(v) => setFilter({ ...filter, world: !!v })} /> World notes (places, factions, magic)
+                </Label>
+                <Label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={filter.glossary} onCheckedChange={(v) => setFilter({ ...filter, glossary: !!v })} /> Glossary terms
+                </Label>
+              </div>
+            </div>
+          )}
           <div className="flex justify-end">
             <Button onClick={submit} className="gradient-violet text-white border-0">Add to Inbox & Extract</Button>
           </div>

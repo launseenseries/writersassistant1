@@ -4,7 +4,9 @@ import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ChevronUp, ChevronDown, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +22,8 @@ function Page() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [advice, setAdvice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [promptOpen, setPromptOpen] = useState<null | "all" | "selected">(null);
+  const [userPrompt, setUserPrompt] = useState("");
 
   const toggle = (id: string) => { const n = new Set(selected); n.has(id) ? n.delete(id) : n.add(id); setSelected(n); };
 
@@ -33,18 +37,19 @@ function Page() {
     toast.message("Order updated.");
   };
 
-  const getAdvice = async (scope: "all" | "selected") => {
+  const getAdvice = async (scope: "all" | "selected", prompt: string) => {
     const list = scope === "all" ? sources : sources.filter((s) => selected.has(s.id));
     if (list.length === 0) { toast.error("Nothing to analyze"); return; }
     setBusy(true);
     try {
       const payload = list.map((s: any) => ({ name: s.name, text: (s.data?.rawText || s.description || "").slice(0, 4000) }));
       const { useSettings } = await import("@/lib/settings");
-      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources: payload, mode: "advice", familyFriendly: useSettings.getState().familyFriendly } });
+      const { data, error } = await supabase.functions.invoke("writing-advice", { body: { sources: payload, mode: "advice", familyFriendly: useSettings.getState().familyFriendly, userPrompt: prompt || undefined } });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setAdvice(data.advice || "(no advice)");
-      logAudit("ai.advice", { entityType: "source", details: { count: list.length, scope } });
+      logAudit("ai.advice", { entityType: "source", details: { count: list.length, scope, hasPrompt: !!prompt } });
+      setPromptOpen(null); setUserPrompt("");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
   };
 
@@ -56,10 +61,26 @@ function Page() {
           <p className="text-sm text-muted-foreground">Original upload order is preserved. Reorder to set corrected story order.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" disabled={busy} onClick={() => getAdvice("selected")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (selected)</Button>
-          <Button className="gradient-violet text-white border-0" disabled={busy} onClick={() => getAdvice("all")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (all)</Button>
+          <Button variant="outline" disabled={busy} onClick={() => setPromptOpen("selected")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (selected)</Button>
+          <Button className="gradient-violet text-white border-0" disabled={busy} onClick={() => setPromptOpen("all")}><Sparkles className="w-4 h-4 mr-1" />AI Advice (all)</Button>
         </div>
       </div>
+
+      <Dialog open={!!promptOpen} onOpenChange={(o) => !o && setPromptOpen(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>AI Writing Advice — {promptOpen === "all" ? "all sources" : "selected sources"}</DialogTitle></DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="ap" className="text-xs text-muted-foreground">Optional prompt — focus the editor's attention (e.g. "tighten pacing in act two", "check Dorothy's voice", "find continuity gaps").</Label>
+            <Textarea id="ap" rows={4} value={userPrompt} onChange={(e) => setUserPrompt(e.target.value)} placeholder="Leave blank for general craft notes." className="bg-background" />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPromptOpen(null)}>Cancel</Button>
+            <Button disabled={busy} className="gradient-violet text-white border-0" onClick={() => promptOpen && getAdvice(promptOpen, userPrompt)}>
+              <Sparkles className="w-4 h-4 mr-1" />{busy ? "Thinking…" : "Get advice"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="panel p-3 text-sm text-yellow-300/80">
         ⚠ Changing upload story order updates pathway source trails and story-order sorting. No records are deleted.

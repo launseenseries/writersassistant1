@@ -9,6 +9,9 @@ import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useCategories } from "@/lib/categories";
+import { useStore } from "@/lib/store";
+import { pickCategoryIcon } from "@/lib/category-icons";
 
 const groups: { label: string; items: { to: string; label: string; icon: any }[] }[] = [
   {
@@ -64,6 +67,8 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
   const { theme, setTheme } = useTheme();
   void setTheme;
   const { user, username } = useAuth();
+  const currentProjectId = useStore((s) => s.currentProjectId);
+  const cats = useCategories((s) => s.categories).filter((c) => c.projectId === currentProjectId);
 
   const wrapperClass = variant === "mobile"
     ? "w-full h-full bg-sidebar overflow-y-auto"
@@ -121,6 +126,26 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
                 );
               })}
             </ul>
+            {g.label === "Story Canon" && cats.length > 0 && (
+              <ul className="space-y-0.5 mt-0.5 pl-1 border-l border-sidebar-border ml-2">
+                {cats.map((c) => {
+                  const Icon = pickCategoryIcon(c.name);
+                  return (
+                    <li key={c.id}>
+                      <Link
+                        to="/canon"
+                        onClick={onNavigate}
+                        className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+                        title={`Custom category: ${c.name}`}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+                        {c.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         ))}
       </nav>

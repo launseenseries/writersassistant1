@@ -1,15 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore } from "@/lib/store";
+import { useSettings } from "@/lib/settings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState } from "react";
 import {
   Inbox, History, FileSearch, Clock, Globe2, Library, Users, MapPin, Shield,
   Heart, Sparkles, GitBranch, AlertTriangle, BookOpen, Download, Settings as SettingsIcon,
-  Sparkle, ScrollText, UserPlus, Crown, Landmark
+  Sparkle, ScrollText, UserPlus, Crown, Landmark, Pencil, Check
 } from "lucide-react";
 
 export const Route = createFileRoute("/hub")({ component: Hub });
@@ -39,9 +41,12 @@ const NAV = [
 
 function Hub() {
   const { projects, currentProjectId, items, updateProject } = useStore();
+  const dynamicSections = useSettings((s) => s.dynamicSections);
   const project = projects.find((p) => p.id === currentProjectId);
   const projItems = items.filter((i) => i.projectId === currentProjectId && !i.deleted);
   const [busy, setBusy] = useState(false);
+  const [editingGenre, setEditingGenre] = useState(false);
+  const [genreDraft, setGenreDraft] = useState("");
 
   const groups = Array.from(new Set(NAV.map((n) => n.group)));
 
@@ -77,7 +82,32 @@ function Hub() {
           <div className="mt-3 grid md:grid-cols-3 gap-3 text-sm">
             <div><div className="text-[10px] uppercase text-muted-foreground">Summary</div><p className="text-muted-foreground line-clamp-4">{project.settingSummary}</p></div>
             <div><div className="text-[10px] uppercase text-muted-foreground">Tone</div><p className="text-muted-foreground line-clamp-4">{project.toneNotes}</p></div>
-            <div><div className="text-[10px] uppercase text-muted-foreground">Genre</div><p className="text-muted-foreground">{project.genre}</p></div>
+            <div>
+              <div className="text-[10px] uppercase text-muted-foreground flex items-center gap-1">
+                Genre
+                {dynamicSections && !editingGenre && (
+                  <button onClick={() => { setGenreDraft(project.genre); setEditingGenre(true); }} className="text-muted-foreground hover:text-foreground" title="Edit genre">
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+              {dynamicSections && editingGenre ? (
+                <div className="flex gap-1 mt-1">
+                  <Input
+                    autoFocus value={genreDraft}
+                    onChange={(e) => setGenreDraft(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { updateProject(project.id, { genre: genreDraft.trim() || project.genre }); setEditingGenre(false); toast.success("Genre updated"); } if (e.key === "Escape") setEditingGenre(false); }}
+                    placeholder="e.g. Dark Romantasy, Cozy Mystery, Cyberpunk Noir"
+                    className="h-7 text-xs bg-background"
+                  />
+                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => { updateProject(project.id, { genre: genreDraft.trim() || project.genre }); setEditingGenre(false); toast.success("Genre updated"); }}>
+                    <Check className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <p className="text-muted-foreground">{project.genre || <span className="italic">No genre set</span>}</p>
+              )}
+            </div>
           </div>
           <div className="mt-3 flex gap-2 flex-wrap">
             <Button size="sm" onClick={regenerate} disabled={busy} className="gradient-violet text-white border-0">

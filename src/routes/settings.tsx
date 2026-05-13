@@ -13,7 +13,7 @@ const THEME_ICON: Record<string, any> = { arcane: Moon, garden: Sun, kawaii: Spa
 export const Route = createFileRoute("/settings")({
   component: () => {
     const { theme, setTheme } = useTheme();
-    const { familyFriendly, setFamilyFriendly, reduceMotion, setReduceMotion } = useSettings();
+    const { familyFriendly, setFamilyFriendly, reduceMotion, setReduceMotion, dynamicSections, setDynamicSections } = useSettings();
 
     return (
       <div className="space-y-4 max-w-3xl">
@@ -69,6 +69,17 @@ export const Route = createFileRoute("/settings")({
                 <p className="text-xs text-muted-foreground mt-0.5">Minimize animations, sparkles, and floating particles across themes.</p>
               </div>
               <Switch id="rm" checked={reduceMotion} onCheckedChange={setReduceMotion} />
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <Label htmlFor="ds" className="font-medium">Dynamic sections</Label>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  When ON, dynamic UI shows up: editable genre on the Project Hub, the
+                  extraction-as filter (Story / World notes / Glossary terms) in the Inbox,
+                  and other adaptive panels. Turn OFF for a fixed, minimal layout.
+                </p>
+              </div>
+              <Switch id="ds" checked={dynamicSections} onCheckedChange={setDynamicSections} />
             </div>
           </CardContent>
         </Card>
