@@ -1,15 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore } from "@/lib/store";
+import { useSettings } from "@/lib/settings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState } from "react";
 import {
   Inbox, History, FileSearch, Clock, Globe2, Library, Users, MapPin, Shield,
   Heart, Sparkles, GitBranch, AlertTriangle, BookOpen, Download, Settings as SettingsIcon,
-  Sparkle, ScrollText, UserPlus, Crown, Landmark
+  Sparkle, ScrollText, UserPlus, Crown, Landmark, Pencil, Check
 } from "lucide-react";
 
 export const Route = createFileRoute("/hub")({ component: Hub });
