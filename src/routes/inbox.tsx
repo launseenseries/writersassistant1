@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, SourceUpload } from "@/lib/store";
+import { useSettings } from "@/lib/settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, FileText } from "lucide-react";
 
@@ -15,7 +18,9 @@ const SOURCE_TYPES = ["Chapter", "Scene", "Notes", "Character bio", "Lore note",
 
 function InboxPage() {
   const { items, currentProjectId, addItem, runExtraction } = useStore();
+  const dynamicSections = useSettings((s) => s.dynamicSections);
   const sources = items.filter((i) => i.projectId === currentProjectId && i.type === "source" && !i.deleted) as SourceUpload[];
+  const [filter, setFilter] = useState({ story: true, world: true, glossary: true });
   const [draft, setDraft] = useState({
     title: "", sourceType: "Chapter", rawText: "", chapter: "", scene: "",
     storyDate: "", pov: "", location: "", tags: "",
