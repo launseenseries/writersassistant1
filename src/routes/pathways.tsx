@@ -141,6 +141,10 @@ function Page() {
     if (genMode === "current-order") {
       return [...sources].sort((a, b) => (a.storyOrder || a.uploadOrder || 0) - (b.storyOrder || b.uploadOrder || 0));
     }
+    if (genMode === "latest-upload") {
+      const sorted = [...sources].sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+      return sorted.slice(0, 1);
+    }
     return selectedUploads.map((id) => sources.find((s) => s.id === id)).filter(Boolean) as SourceUpload[];
   }, [genMode, sources, selectedUploads]);
 
