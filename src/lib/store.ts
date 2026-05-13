@@ -170,7 +170,7 @@ interface State {
   bulkAddTags: (ids: string[], tags: string[]) => void;
   approveSuggestion: (id: string) => void;
   rejectSuggestion: (id: string) => void;
-  runExtraction: (sourceId: string) => number;
+  runExtraction: (sourceId: string, filter?: { story?: boolean; world?: boolean; glossary?: boolean }) => number;
 }
 
 const now = () => new Date().toISOString();
