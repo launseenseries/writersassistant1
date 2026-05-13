@@ -67,6 +67,8 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
   const { theme, setTheme } = useTheme();
   void setTheme;
   const { user, username } = useAuth();
+  const currentProjectId = useStore((s) => s.currentProjectId);
+  const cats = useCategories((s) => s.categories).filter((c) => c.projectId === currentProjectId);
 
   const wrapperClass = variant === "mobile"
     ? "w-full h-full bg-sidebar overflow-y-auto"
