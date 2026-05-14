@@ -90,7 +90,7 @@ export const Route = createFileRoute("/canon")({
             </Link>
           ))}
           {myCats.map((c) => {
-            const Icon = pickCategoryIcon(c.name);
+            const Icon = pickCategoryIcon(c.name, c.icon);
             return (
               <Card key={c.id} className="relative hover:border-primary transition-colors">
                 <button

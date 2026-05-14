@@ -8,3 +8,9 @@ verify_jwt = true
 
 [functions.pathway-from-prompt]
 verify_jwt = true
+
+[functions.category-icon]
+verify_jwt = true
+
+[functions.npc-randomizer]
+verify_jwt = true

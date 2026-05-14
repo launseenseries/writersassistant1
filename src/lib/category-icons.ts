@@ -46,7 +46,15 @@ const KEYWORDS: Array<[RegExp, keyof typeof Lucide]> = [
   [/race|species|kin/i, "UsersRound"],
 ];
 
-export function pickCategoryIcon(name: string): LucideIcon {
+export function getIconByName(name?: string): LucideIcon | null {
+  if (!name) return null;
+  const ico = (Lucide as any)[name];
+  return (ico && typeof ico === "function") ? (ico as LucideIcon) : null;
+}
+
+export function pickCategoryIcon(name: string, storedIcon?: string): LucideIcon {
+  const stored = getIconByName(storedIcon);
+  if (stored) return stored;
   const n = (name || "").trim();
   for (const [re, key] of KEYWORDS) {
     if (re.test(n)) {

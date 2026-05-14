@@ -1,17 +1,21 @@
+import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Home, FolderKanban, Inbox, History, FileSearch, Clock, Globe2, Library,
   Users, MapPin, Shield, Heart, Sparkles, BookOpen, GitBranch, AlertTriangle,
   RotateCcw, FileText, Download, Trash2, Settings, Feather, Crown, Landmark,
-  UserPlus, ScrollText, Sun, Moon, LogIn, LogOut
+  UserPlus, ScrollText, Sun, Moon, LogIn, LogOut, Plus, Loader2
 } from "lucide-react";
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useCategories } from "@/lib/categories";
 import { useStore } from "@/lib/store";
 import { pickCategoryIcon } from "@/lib/category-icons";
+import { logAudit } from "@/lib/audit";
+import { toast } from "sonner";
 
 const groups: { label: string; items: { to: string; label: string; icon: any }[] }[] = [
   {
@@ -69,6 +73,25 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
   const { user, username } = useAuth();
   const currentProjectId = useStore((s) => s.currentProjectId);
   const cats = useCategories((s) => s.categories).filter((c) => c.projectId === currentProjectId);
+  const addCategory = useCategories((s) => s.add);
+  const [adding, setAdding] = useState<null | string>(null); // null = closed, "" = open empty
+  const [busy, setBusy] = useState(false);
+
+  const submitCategory = async () => {
+    const name = (adding || "").trim();
+    if (!name) { setAdding(null); return; }
+    setBusy(true);
+    let iconName: string | undefined;
+    try {
+      const { data, error } = await supabase.functions.invoke("category-icon", { body: { name } });
+      if (!error && (data as any)?.icon) iconName = (data as any).icon;
+    } catch { /* fallback to local heuristic */ }
+    addCategory(currentProjectId, name, iconName);
+    logAudit("canon.category.create", { entityName: name, details: { icon: iconName, source: "sidebar" } });
+    toast.success(`Category "${name}" added`);
+    setAdding(null);
+    setBusy(false);
+  };
 
   const wrapperClass = variant === "mobile"
     ? "w-full h-full bg-sidebar overflow-y-auto"
@@ -103,7 +126,18 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
       <nav className="p-2 space-y-4">
         {groups.map((g) => (
           <div key={g.label}>
-            <div className="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground">{g.label}</div>
+            <div className="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+              <span>{g.label}</span>
+              {g.label === "Story Canon" && (
+                <button
+                  onClick={() => setAdding(adding === null ? "" : null)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  title="Add custom category"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              )}
+            </div>
             <ul className="space-y-0.5">
               {g.items.map((it) => {
                 const active = path === it.to;
@@ -126,10 +160,26 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
                 );
               })}
             </ul>
+            {g.label === "Story Canon" && adding !== null && (
+              <div className="mt-1 px-2 flex gap-1 items-center">
+                <Input
+                  autoFocus
+                  value={adding}
+                  onChange={(e) => setAdding(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") submitCategory(); if (e.key === "Escape") setAdding(null); }}
+                  placeholder="Category name…"
+                  className="h-7 text-xs bg-background"
+                  disabled={busy}
+                />
+                <Button size="icon" variant="ghost" className="h-7 w-7" onClick={submitCategory} disabled={busy}>
+                  {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                </Button>
+              </div>
+            )}
             {g.label === "Story Canon" && cats.length > 0 && (
               <ul className="space-y-0.5 mt-0.5 pl-1 border-l border-sidebar-border ml-2">
                 {cats.map((c) => {
-                  const Icon = pickCategoryIcon(c.name);
+                  const Icon = pickCategoryIcon(c.name, c.icon);
                   return (
                     <li key={c.id}>
                       <Link
