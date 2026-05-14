@@ -126,7 +126,18 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
       <nav className="p-2 space-y-4">
         {groups.map((g) => (
           <div key={g.label}>
-            <div className="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground">{g.label}</div>
+            <div className="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+              <span>{g.label}</span>
+              {g.label === "Story Canon" && (
+                <button
+                  onClick={() => setAdding(adding === null ? "" : null)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  title="Add custom category"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              )}
+            </div>
             <ul className="space-y-0.5">
               {g.items.map((it) => {
                 const active = path === it.to;
@@ -149,10 +160,26 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
                 );
               })}
             </ul>
+            {g.label === "Story Canon" && adding !== null && (
+              <div className="mt-1 px-2 flex gap-1 items-center">
+                <Input
+                  autoFocus
+                  value={adding}
+                  onChange={(e) => setAdding(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") submitCategory(); if (e.key === "Escape") setAdding(null); }}
+                  placeholder="Category name…"
+                  className="h-7 text-xs bg-background"
+                  disabled={busy}
+                />
+                <Button size="icon" variant="ghost" className="h-7 w-7" onClick={submitCategory} disabled={busy}>
+                  {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                </Button>
+              </div>
+            )}
             {g.label === "Story Canon" && cats.length > 0 && (
               <ul className="space-y-0.5 mt-0.5 pl-1 border-l border-sidebar-border ml-2">
                 {cats.map((c) => {
-                  const Icon = pickCategoryIcon(c.name);
+                  const Icon = pickCategoryIcon(c.name, c.icon);
                   return (
                     <li key={c.id}>
                       <Link
