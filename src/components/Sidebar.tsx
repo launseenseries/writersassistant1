@@ -1,17 +1,21 @@
+import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Home, FolderKanban, Inbox, History, FileSearch, Clock, Globe2, Library,
   Users, MapPin, Shield, Heart, Sparkles, BookOpen, GitBranch, AlertTriangle,
   RotateCcw, FileText, Download, Trash2, Settings, Feather, Crown, Landmark,
-  UserPlus, ScrollText, Sun, Moon, LogIn, LogOut
+  UserPlus, ScrollText, Sun, Moon, LogIn, LogOut, Plus, Loader2
 } from "lucide-react";
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useCategories } from "@/lib/categories";
 import { useStore } from "@/lib/store";
 import { pickCategoryIcon } from "@/lib/category-icons";
+import { logAudit } from "@/lib/audit";
+import { toast } from "sonner";
 
 const groups: { label: string; items: { to: string; label: string; icon: any }[] }[] = [
   {
