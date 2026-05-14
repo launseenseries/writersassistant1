@@ -7,12 +7,16 @@ import appCss from "../styles.css?url";
 import { Sidebar } from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { useStore } from "@/lib/store";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectSeparator } from "@/components/ui/select";
 import { AuthProvider } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Feather } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Menu, Feather, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -67,15 +71,53 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function ProjectSwitcher() {
-  const { projects, currentProjectId, setCurrentProject } = useStore();
+  const { projects, currentProjectId, setCurrentProject, createProject } = useStore();
   const active = projects.filter((p) => !p.deleted);
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState({ title: "", genre: "", settingSummary: "" });
+
+  const handleChange = (v: string) => {
+    if (v === "__new__") { setOpen(true); return; }
+    setCurrentProject(v);
+  };
+  const submit = () => {
+    if (!draft.title.trim()) { toast.error("Title required"); return; }
+    const p = createProject(draft);
+    toast.success(`Project "${p.title}" created`);
+    setOpen(false);
+    setDraft({ title: "", genre: "", settingSummary: "" });
+  };
+
   return (
-    <Select value={currentProjectId} onValueChange={setCurrentProject}>
-      <SelectTrigger className="w-[160px] sm:w-[260px] bg-card"><SelectValue /></SelectTrigger>
-      <SelectContent>
-        {active.map((p) => <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>)}
-      </SelectContent>
-    </Select>
+    <>
+      <Select value={currentProjectId} onValueChange={handleChange}>
+        <SelectTrigger className="w-[160px] sm:w-[260px] bg-card"><SelectValue /></SelectTrigger>
+        <SelectContent>
+          {active.map((p) => <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>)}
+          <SelectSeparator />
+          <SelectItem value="__new__" className="text-primary">
+            <span className="flex items-center gap-2"><Plus className="w-3.5 h-3.5" /> New project…</span>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>New project</DialogTitle>
+            <DialogDescription>Each project keeps its own canon, uploads, and pathways.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Input autoFocus placeholder="Project title" value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} className="bg-background" />
+            <Input placeholder="Genre" value={draft.genre} onChange={(e) => setDraft({ ...draft, genre: e.target.value })} className="bg-background" />
+            <Textarea placeholder="Setting summary (optional)" value={draft.settingSummary} onChange={(e) => setDraft({ ...draft, settingSummary: e.target.value })} className="bg-background" rows={3} />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={submit} className="gradient-violet text-white border-0">Create</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
