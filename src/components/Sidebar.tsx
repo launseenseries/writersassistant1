@@ -73,6 +73,25 @@ export function Sidebar({ variant = "desktop", onNavigate }: { variant?: "deskto
   const { user, username } = useAuth();
   const currentProjectId = useStore((s) => s.currentProjectId);
   const cats = useCategories((s) => s.categories).filter((c) => c.projectId === currentProjectId);
+  const addCategory = useCategories((s) => s.add);
+  const [adding, setAdding] = useState<null | string>(null); // null = closed, "" = open empty
+  const [busy, setBusy] = useState(false);
+
+  const submitCategory = async () => {
+    const name = (adding || "").trim();
+    if (!name) { setAdding(null); return; }
+    setBusy(true);
+    let iconName: string | undefined;
+    try {
+      const { data, error } = await supabase.functions.invoke("category-icon", { body: { name } });
+      if (!error && (data as any)?.icon) iconName = (data as any).icon;
+    } catch { /* fallback to local heuristic */ }
+    addCategory(currentProjectId, name, iconName);
+    logAudit("canon.category.create", { entityName: name, details: { icon: iconName, source: "sidebar" } });
+    toast.success(`Category "${name}" added`);
+    setAdding(null);
+    setBusy(false);
+  };
 
   const wrapperClass = variant === "mobile"
     ? "w-full h-full bg-sidebar overflow-y-auto"
